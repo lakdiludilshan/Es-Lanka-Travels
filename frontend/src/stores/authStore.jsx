@@ -9,6 +9,11 @@ const authStore = create((set) => ({
     password: "",
   },
 
+  signupForm: {
+    email: "",
+    password: "",
+  },
+
   updateLoginForm: (e) => {
     const { name, value } = e.target;
 
@@ -22,22 +27,57 @@ const authStore = create((set) => ({
     });
   },
 
+  updateSignupForm: (e) => {
+    const { name, value } = e.target;
+
+    set((state) => {
+      return {
+        signupForm: {
+          ...state.signupForm,
+          [name]: value,
+        },
+      };
+    });
+  },
+
   login: async () => {
     const { loginForm } = authStore.getState();
 
-    const res = await axios.post("/api/users/login", loginForm, {
-      withCredentials: true,
-    });
+    const res = await axios.post("/api/users/login", loginForm);
     console.log(res);
 
-    set({loggedIn: true});
+    set({loggedIn: true,
+      //clear forms after click button
+      loginForm: {
+        email: "",
+        password: "",
+      },
+    });
+  },
+
+  signup: async () => {
+    const { signupForm } = authStore.getState();
+
+    const res = await axios.post("/api/users/signup", signupForm)
+
+    console.log(res);
+    set({
+      signupForm: {
+        email: "",
+        password: "",
+      },
+    })
+  },
+
+  logout: async () => {
+  await axios.get("/api/users/logout")
+
+    set({loggedIn: false});
   },
 
   checkAuth: async () => {
     try {
-      await axios.get("/api/users/checkauth", {
-        withCredentials: true,
-      });
+      await axios.get("/api/users/checkauth");
       set({loggedIn: true});
     } catch (error) {
       set({loggedIn: false});
