@@ -5,6 +5,9 @@ import HomePage from "./pages/HomePage";
 import RequireAuth from "./components/RequireAuth";
 import Signup from "./pages/Signup";
 import Logout from "./pages/Logout";
+import About from "./pages/About";
+import Dashboard from "./pages/Dashboard";
+import Tours from "./pages/Tours";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<Signup/>} />
           <Route path="/logout" element={<Logout/>} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tours" element={<Tours />} />
         </Routes>
       </BrowserRouter>
     </div>
