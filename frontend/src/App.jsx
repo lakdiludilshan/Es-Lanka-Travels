@@ -8,11 +8,13 @@ import Logout from "./pages/Logout";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Tours from "./pages/Tours";
+import Header from "./components/Header";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Header />
         <ul>
           <li>
             <Link to="/">Home</Link>
