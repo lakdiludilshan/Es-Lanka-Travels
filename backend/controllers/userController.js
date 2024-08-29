@@ -6,13 +6,13 @@ const jwt = require("jsonwebtoken");
 async function signup(req, res) {
   try {
     //get data from request body
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
     //hash password
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     //create user with data
-    await User.create({ email, password: hashedPassword });
+    await User.create({ username, email, password: hashedPassword });
 
     //respond
     res.sendStatus(200);
