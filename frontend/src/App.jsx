@@ -9,6 +9,7 @@ import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Tours from "./pages/Tours";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tours" element={<Tours />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );
