@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import RequireAuth from "./components/RequireAuth";
 import Signup from "./pages/Signup";
@@ -18,7 +18,7 @@ function App() {
         <Header />
         <Routes>
           <Route index element={ <RequireAuth> <HomePage /> </RequireAuth> }/>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup/>} />
           <Route path="/logout" element={<Logout/>} />
           <Route path="/about" element={<About/>} />
