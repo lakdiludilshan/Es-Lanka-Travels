@@ -15,7 +15,7 @@ async function signup(req, res) {
     await User.create({ username, email, password: hashedPassword });
 
     //respond
-    res.sendStatus(200);
+    res.json({ message: "OK" });
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
