@@ -48,7 +48,7 @@ async function login(req, res) {
     });
 
     //send it
-    res.sendStatus(200);
+    res.json(user);
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
