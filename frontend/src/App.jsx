@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import Tours from "./pages/Tours";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -17,12 +18,22 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route index element={ <RequireAuth> <HomePage /> </RequireAuth> }/>
+          <Route
+            index
+            element={
+              <RequireAuth>
+                {" "}
+                <HomePage />{" "}
+              </RequireAuth>
+            }
+          />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup/>} />
-          <Route path="/logout" element={<Logout/>} />
-          <Route path="/about" element={<About/>} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/about" element={<About />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
           <Route path="/tours" element={<Tours />} />
         </Routes>
         <Footer />
