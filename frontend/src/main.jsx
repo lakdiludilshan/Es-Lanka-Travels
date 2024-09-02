@@ -6,6 +6,7 @@ import axios from "axios";
 import { store, persistor } from "./redux/store.js";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import ThemeProvider from "./components/ThemeProvider.jsx";
 
 // axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
@@ -13,7 +14,9 @@ axios.defaults.withCredentials = true;
 ReactDOM.createRoot(document.getElementById("root")).render(
   <PersistGate persistor={persistor}>
     <Provider store={store}>
-      <App />
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
     </Provider>
   </PersistGate>
 );
