@@ -12,10 +12,13 @@ async function signup(req, res) {
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     //create user with data
-    await User.create({ username, email, password: hashedPassword });
+    const userr = await User.create({ username, email, password: hashedPassword });
 
     //respond
-    res.json({ message: "OK" });
+    res.status(201).json({
+      message: "Account created successfully",
+      user: userr,
+    });
   } catch (error) {
     console.log(error);
     res.sendStatus(400);
@@ -114,6 +117,7 @@ function checkAuth(req, res) {
     return res.sendStatus(400);
   }
 }
+
 const updateUser = async (req, res, next) => {
   if (
     req.body.username == undefined ||
@@ -179,6 +183,18 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  if (req.user.id !== req.params._id) {
+    return next(errorHandler(403, "You are not allowed to delete this user"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params._id);
+    res.sendStatus(200).json({message: "User has been deleted"});
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signup,
   login,
@@ -186,4 +202,5 @@ module.exports = {
   logout,
   checkAuth,
   updateUser,
+  deleteUser,
 };
