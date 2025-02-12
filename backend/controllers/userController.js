@@ -40,7 +40,7 @@ async function login(req, res) {
 
     //create jwt token
     const exp = Date.now() + 1000 * 60 * 60 * 24 * 30;
-    const token = jwt.sign({ sub: user._id, exp }, process.env.SECRET);
+    const token = jwt.sign({ sub: user._id, exp, isAdmin: user.isAdmin }, process.env.SECRET);
 
     //set cookie
     res.cookie("Authorization", token, {
@@ -63,7 +63,7 @@ async function google(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ sub: user._id }, process.env.SECRET);
+      const token = jwt.sign({ sub: user._id, isAdmin: user.isAdmin }, process.env.SECRET);
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -85,7 +85,7 @@ async function google(req, res, next) {
         profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({ sub: newUser._id }, process.env.SECRET);
+      const token = jwt.sign({ sub: newUser._id, isAdmin: newUser.isAdmin }, process.env.SECRET);
       const { password, ...rest } = newUser._doc;
       res
         .status(200)

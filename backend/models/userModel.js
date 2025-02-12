@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: "https://cdn.vectorstock.com/i/500p/53/42/user-member-avatar-face-profile-icon-vector-22965342.jpg",
     },
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    },
 },{timestamps: true}
 );
 
