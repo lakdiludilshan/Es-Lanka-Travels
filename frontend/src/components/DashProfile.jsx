@@ -18,6 +18,7 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
+  logoutSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
@@ -125,6 +126,7 @@ export default function DashProfile() {
       setUpdateUserError(error.message);
     }
   };
+
   const handleDeleteUser = async () => {
     setShowModal(false);
     try {
@@ -142,6 +144,23 @@ export default function DashProfile() {
       dispatch(deleteUserFailure(error.message));
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      const res = await fetch(`/api/users/logout`,{
+        method: "GET",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(logoutSuccess());
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -220,7 +239,7 @@ export default function DashProfile() {
         <span onClick={() => setShowModal(true)} className="cursor-pointer">
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleLogout} className="cursor-pointer">Sign Out</span>
       </div>
       {updateUserSuccess && <Alert color="success" className="mt-5">{updateUserSuccess}</Alert>}
       {updateUserError && <Alert color="failure" className="mt-5">{updateUserError}</Alert>}

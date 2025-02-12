@@ -103,9 +103,8 @@ async function google(req, res, next) {
 function logout(req, res) {
   try {
     res.clearCookie("Authorization");
-    res.sendStatus(200);
+    res.status(200).json({ message: "Logged out" });
   } catch (error) {
-    console.log(error);
     res.sendStatus(400);
   }
 }
