@@ -188,8 +188,11 @@ const deleteUser = async (req, res, next) => {
     return next(errorHandler(403, "You are not allowed to delete this user"));
   }
   try {
-    await User.findByIdAndDelete(req.params._id);
-    res.sendStatus(200).json({message: "User has been deleted"});
+    const deletedUser = await User.findByIdAndDelete(req.params._id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User has been deleted", user: deletedUser });
   } catch (error) {
     next(error);
   }

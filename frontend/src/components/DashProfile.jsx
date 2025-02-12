@@ -1,4 +1,4 @@
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, TextInput, Modal } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
@@ -7,14 +7,22 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { updateStart, updateSuccess, updateFailure } from "../redux/user/userSlice";
+import {
+  updateStart,
+  updateSuccess,
+  updateFailure,
+  deleteUserStart,
+  deleteUserFailure,
+  deleteUserSuccess,
+} from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 
 export default function DashProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -22,6 +30,7 @@ export default function DashProfile() {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserError, setUpdateUserError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
@@ -81,7 +90,7 @@ export default function DashProfile() {
   };
 
   const hadleChange = (e) => {
-    setFormData({...formData, [e.target.id]: e.target.value.trim() });
+    setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
   const handleSubmit = async (e) => {
@@ -90,7 +99,7 @@ export default function DashProfile() {
       setUpdateUserError("Please update at least one field");
       return;
     }
-    if(imageFileUploading) {
+    if (imageFileUploading) {
       setUpdateUserError("Please wait for image upload to complete");
       return;
     }
@@ -114,6 +123,23 @@ export default function DashProfile() {
     } catch (error) {
       dispatch(updateFailure(error.message));
       setUpdateUserError(error.message);
+    }
+  };
+  const handleDeleteUser = async () => {
+    setShowModal(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/users/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -156,7 +182,11 @@ export default function DashProfile() {
             src={imageFileUrl || currentUser.profilePicture}
             alt="user"
             className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] 
-              ${imageFileUploadProgress && imageFileUploadProgress < 100 && 'opacity-60'}`}
+              ${
+                imageFileUploadProgress &&
+                imageFileUploadProgress < 100 &&
+                "opacity-60"
+              }`}
           />
         </div>
         {imageFileUploadError && (
@@ -166,26 +196,59 @@ export default function DashProfile() {
           type="text"
           id="username"
           placeholder="username"
-          defaultValue={currentUser.username} onChange={hadleChange}
+          defaultValue={currentUser.username}
+          onChange={hadleChange}
         />
         <TextInput
           type="email"
           id="email"
           placeholder="email"
-          defaultValue={currentUser.email} onChange={hadleChange}
+          defaultValue={currentUser.email}
+          onChange={hadleChange}
         />
-        <TextInput type="password" id="password" placeholder="password" onChange={hadleChange} />
+        <TextInput
+          type="password"
+          id="password"
+          placeholder="password"
+          onChange={hadleChange}
+        />
         <Button type="submit" gradientDuoTone="purpleToBlue" outline>
           Update
         </Button>
       </form>
       <div className="text-red-500 flex justify-between mt-5">
-        <span className="cursor-pointer">Delete Account</span>
+        <span onClick={() => setShowModal(true)} className="cursor-pointer">
+          Delete Account
+        </span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
-      {updateUserSuccess && <Alert color="success">{updateUserSuccess}</Alert>}
-      {updateUserError && <Alert color="failure">{updateUserError}</Alert>}
+      {updateUserSuccess && <Alert color="success" className="mt-5">{updateUserSuccess}</Alert>}
+      {updateUserError && <Alert color="failure" className="mt-5">{updateUserError}</Alert>}
+      {error && <Alert color="failure" className="mt-5">{error}</Alert>}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
+              Are you sure you want to delete your account?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeleteUser}>
+                Yes, I'm sure
+              </Button>
+              <Button color='gray' onClick={() => setShowModal(false)} outline>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
-
