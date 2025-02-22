@@ -2,6 +2,7 @@ const Post = require("../models/postModel");
 const { errorHandler } = require("../utils/error");
 
 const createPost = async (req, res, next) => {
+  console.log(req.body);
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "Unauthorized to create a post"));
   }
