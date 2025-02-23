@@ -53,7 +53,7 @@ const DashPosts = () => {
   };
 
   // const handleDeletePost = async () => {
-  //   setShowMore(false);
+  //   setShowModal(false);
   //   try {
   //     const res = await fetch(
   //       `/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,
