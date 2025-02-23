@@ -7,7 +7,7 @@ const {createPost , getPosts, deletePost, updatePost} = require("../controllers/
 
 router.post('/create', requireAuth, createPost);
 router.get('/getposts', getPosts);
-router.delete('/deletepost/:postId/:userId', deletePost);
+router.delete('/deletepost/:postId/:userId', requireAuth, deletePost);
 router.put('/updatepost/:postId/:userId', requireAuth, updatePost);
 
 module.exports = router;

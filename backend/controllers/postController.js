@@ -56,8 +56,6 @@ const getPosts = async (req, res, next) => {
       .skip(startindex)
       .limit(limit);
 
-    console.log(posts);
-
     const totalPosts = await Post.countDocuments();
 
     const now = new Date();
@@ -81,10 +79,10 @@ const getPosts = async (req, res, next) => {
 const deletePost = async (req, res, next) => {
   const { id } = req.params;
 
-  // // Check authorization properly
-  // if (!req.user.isAdmin && req.user._id.toString() !== userId) {
-  //   return next(errorHandler(403, "Unauthorized to delete this post"));
-  // }
+  // Check authorization properly
+  if (!req.user.isAdmin && req.user._id.toString() !== userId) {
+    return next(errorHandler(403, "Unauthorized to delete this post"));
+  }
   try {
     await Post.findByIdAndDelete(id);
     res.status(200).json("the post has been deleted");
