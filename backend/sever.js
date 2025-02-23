@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
+const commentRoute = require('./routes/commentRoute');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(cors({
 //route middleware
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
+app.use("/api/comments", commentRoute);
 
 // routes
 app.get("/", (req, res ) => {
