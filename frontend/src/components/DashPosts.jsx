@@ -14,14 +14,12 @@ const DashPosts = () => {
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null);
 
-  console.log("current user id" + currentUser._id);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const res = await fetch(`api/posts/getposts?userId=${currentUser._id}`);
         const data = await res.json();
         if (res.ok) {
-          console.log(data.posts);
           setUserPosts(data.posts);
           if (data.posts.length < 9) {
             setShowMore(false);

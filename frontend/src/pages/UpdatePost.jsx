@@ -24,7 +24,6 @@ const UpdatePost = () => {
   useEffect(() => {
     try {
         const fetchPost = async () => {
-            console.log("fetching post with id: " + postId);
             const res = await fetch(`/api/posts/getposts?postId=${postId}`);
             const data = await res.json();
             if (!res.ok) {
