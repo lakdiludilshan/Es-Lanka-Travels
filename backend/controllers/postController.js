@@ -31,13 +31,19 @@ const createPost = async (req, res, next) => {
 const getPosts = async (req, res, next) => {
   try {
     const startindex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+    let limit = 0;
+    if (req.query.limit) {
+      limit = parseInt(req.query.limit);
+    } else if (req.postId) {
+      limit = 0;
+    } else {
+      limit = 9;
+    }
     const sortDirection = req.query.order === "asc" ? 1 : -1;
     const posts = await Post.find({
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.category && { category: req.query.category }),
       ...(req.query.slug && { slug: req.query.slug }),
-      ...(req.query.postId && { postId: req.query.postId }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.searchTerm && {
         $or: [
@@ -49,6 +55,8 @@ const getPosts = async (req, res, next) => {
       .sort({ updatedAt: sortDirection })
       .skip(startindex)
       .limit(limit);
+
+    console.log(posts);
 
     const totalPosts = await Post.countDocuments();
 
@@ -71,7 +79,6 @@ const getPosts = async (req, res, next) => {
 };
 
 const deletePost = async (req, res, next) => {
-
   const { id } = req.params;
 
   // // Check authorization properly
@@ -80,11 +87,54 @@ const deletePost = async (req, res, next) => {
   // }
   try {
     await Post.findByIdAndDelete(id);
-    res.status(200).json('the post has been deleted');
+    res.status(200).json("the post has been deleted");
   } catch (error) {
     next(error);
   }
+};
 
-}
+const updatePost = async (req, res, next) => {
+  // Check authorization
+  if (!req.user || (!req.user.isAdmin && req.user.id !== req.params.userId)) {
+    return next(errorHandler(403, "Unauthorized to update this post"));
+  }
 
-module.exports = { createPost, getPosts, deletePost };
+  try {
+    console.log("Update request received for post:", req.params.postId);
+    console.log("User attempting update:", req.user.id);
+    console.log("Update data received:", req.body);
+
+    // Check if postId is valid
+    if (!req.params.postId) {
+      return next(errorHandler(400, "Post ID is required"));
+    }
+
+    // Attempt to update the post
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          category: req.body.category,
+          image: req.body.image,
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    // If the post is not found
+    if (!updatedPost) {
+      return next(errorHandler(404, "Post not found"));
+    }
+
+    console.log("Post updated successfully:", updatedPost);
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    console.error("Error while updating post:", error);
+    next(errorHandler(500, "Internal Server Error"));
+  }
+};
+
+
+module.exports = { createPost, getPosts, deletePost, updatePost };
