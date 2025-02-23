@@ -52,52 +52,54 @@ const DashPosts = () => {
     }
   };
 
-  // const handleDeletePost = async () => {
+  const handleDeletePost = async () => {
+    setShowModal(false);
+    try {
+      const res = await fetch(
+        `/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      console.log(postIdToDelete);
+      console.log(currentUser._id);
+      console.log(res.data);
+      const data = await res.json();
+      if (res.ok) {
+        setUserPosts((prev) =>
+          prev.filter((post) => post._id !== postIdToDelete)
+        );
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  // const deleteUserPosts = async () => {
   //   setShowModal(false);
+
   //   try {
-  //     const res = await fetch(
+  //     const response = await fetch(
   //       `/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,
   //       {
   //         method: "DELETE",
   //       }
   //     );
 
-  //     console.log(postIdToDelete)
-  //     console.log(currentUser._id)
-  //     console.log(res.data);
-  //     const data = await res.json();
-  //     if (res.ok) {
-  //       console.log(data.message);
-  //     } else {
-      //   setUserPosts((prev) =>
-      //     prev.filter((post) => post._id !== postIdToDelete)
-      //   );
-      // }
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log(data);
+  //       setUserPosts((prev) =>
+  //         prev.filter((post) => post._id !== postIdToDelete)
+  //       );
+  //     }
   //   } catch (error) {
   //     console.log(error.message);
   //   }
   // };
-
-  const deleteUserPosts = async() =>{
-    setShowModal(false);
-
-    try{
-      const response = await fetch(`/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,{
-        method: 'DELETE'
-      })
-
-      if(response.ok) {
-        const data = await response.json();
-        console.log(data)
-        setUserPosts((prev) =>
-          prev.filter((post) => post._id !== postIdToDelete)
-        );
-      }
-      
-    }catch(error) {
-      console.log(error.message)
-    }
-  }
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar">
@@ -145,7 +147,7 @@ const DashPosts = () => {
                       onClick={() => {
                         setShowModal(true);
                         setPostIdToDelete(post._id);
-                        console.log("post id"+post._id);
+                        console.log("post id" + post._id);
                       }}
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                     >
@@ -177,29 +179,29 @@ const DashPosts = () => {
         <p>No posts found</p>
       )}
       <Modal
-              show={showModal}
-              onClose={() => setShowModal(false)}
-              popup
-              size="md"
-            >
-              <Modal.Header />
-              <Modal.Body>
-                <div className="text-center">
-                  <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-                  <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
-                    Are you sure you want to delete this post?
-                  </h3>
-                  <div className="flex justify-center gap-4">
-                    <Button color="failure" onClick={deleteUserPosts}>
-                      Yes, I'm sure
-                    </Button>
-                    <Button color='gray' onClick={() => setShowModal(false)} outline>
-                      No, cancel
-                    </Button>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
+              Are you sure you want to delete this post?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeletePost}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)} outline>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

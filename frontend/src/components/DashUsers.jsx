@@ -37,9 +37,7 @@ const DashUsers = () => {
   const handleShowMore = async () => {
     const startIndex = users.length;
     try {
-      const res = await fetch(
-        `/api/users/getusers?startIndex=${startIndex}`
-      );
+      const res = await fetch(`/api/users/getusers?startIndex=${startIndex}`);
       const data = await res.json();
       if (res.ok) {
         setUsers((prev) => [...prev, ...data.users]);
@@ -55,49 +53,23 @@ const DashUsers = () => {
   const handleDeleteUser = async () => {
     setShowModal(false);
     try {
-      const res = await fetch(
-        `/api/users/deleteuser/${userIdToDelete}/${currentUser._id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`/api/users/delete/${userIdToDelete}`, {
+        method: "DELETE",
+      });
 
-      console.log(postIdToDelete)
-      console.log(currentUser._id)
+      console.log(userIdToDelete);
+      console.log(currentUser._id);
       console.log(res.data);
       const data = await res.json();
       if (res.ok) {
-        console.log(data.message);
+        setUsers((prev) => prev.filter((user) => user._id !== userIdToDelete));
       } else {
-        setUserPosts((prev) =>
-          prev.filter((post) => post._id !== postIdToDelete)
-        );
+        console.log(data.message);
       }
     } catch (error) {
       console.log(error.message);
     }
   };
-
-//   const deleteUserPosts = async() =>{
-//     setShowModal(false);
-
-//     try{
-//       const response = await fetch(`/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,{
-//         method: 'DELETE'
-//       })
-
-//       if(response.ok) {
-//         const data = await response.json();
-//         console.log(data)
-//         setUserPosts((prev) =>
-//           prev.filter((post) => post._id !== postIdToDelete)
-//         );
-//       }
-      
-//     }catch(error) {
-//       console.log(error.message)
-//     }
-//   }
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar">
@@ -119,21 +91,27 @@ const DashUsers = () => {
                     {new Date(user.createdAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                      <img
-                        src={user.profilePicture}
-                        alt={user.username}
-                        className="w-10 h-10 object-cover bg-gray-500 rounded-full"
-                      />
+                    <img
+                      src={user.profilePicture}
+                      alt={user.username}
+                      className="w-10 h-10 object-cover bg-gray-500 rounded-full"
+                    />
                   </Table.Cell>
                   <Table.Cell>{user.username}</Table.Cell>
                   <Table.Cell>{user.email}</Table.Cell>
-                  <Table.Cell>{user.isAdmin ? (<FaCheck className="text-green-500"/>) : (<FaTimes className="text-red-500"/>)}</Table.Cell>
+                  <Table.Cell>
+                    {user.isAdmin ? (
+                      <FaCheck className="text-green-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
+                  </Table.Cell>
                   <Table.Cell>
                     <span
                       onClick={() => {
                         setShowModal(true);
                         setUserIdToDelete(user._id);
-                        console.log("user id"+user._id);
+                        console.log("user id" + user._id);
                       }}
                       className="font-medium text-red-500 hover:underline cursor-pointer"
                     >
@@ -157,29 +135,29 @@ const DashUsers = () => {
         <p>No users found</p>
       )}
       <Modal
-              show={showModal}
-              onClose={() => setShowModal(false)}
-              popup
-              size="md"
-            >
-              <Modal.Header />
-              <Modal.Body>
-                <div className="text-center">
-                  <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
-                  <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
-                    Are you sure you want to delete this user?
-                  </h3>
-                  <div className="flex justify-center gap-4">
-                    <Button color="failure" onClick={handleDeleteUser}>
-                      Yes, I'm sure
-                    </Button>
-                    <Button color='gray' onClick={() => setShowModal(false)} outline>
-                      No, cancel
-                    </Button>
-                  </div>
-                </div>
-              </Modal.Body>
-            </Modal>
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
+            <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
+              Are you sure you want to delete this user?
+            </h3>
+            <div className="flex justify-center gap-4">
+              <Button color="failure" onClick={handleDeleteUser}>
+                Yes, I'm sure
+              </Button>
+              <Button color="gray" onClick={() => setShowModal(false)} outline>
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
