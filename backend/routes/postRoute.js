@@ -10,4 +10,5 @@ router.get('/getposts', getPosts);
 router.delete('/deletepost/:postId/:userId', requireAuth, deletePost);
 router.put('/updatepost/:postId/:userId', requireAuth, updatePost);
 
+
 module.exports = router;
