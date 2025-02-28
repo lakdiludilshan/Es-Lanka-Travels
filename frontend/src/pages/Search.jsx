@@ -147,7 +147,7 @@ function Search() {
         <h1 className="text-3xl font-semibold sm:border-b border-gray-500 p-3 mt-5">
           Post Results:
         </h1>
-        <div className="p-7 flex flex-wrap gap-4 ">
+        <div className="p-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
           {!loading && posts.length === 0 && (
             <p className="text-xl text-gray-500 ">No post found.</p>
           )}
@@ -155,6 +155,7 @@ function Search() {
           {!loading &&
             posts &&
             posts.map((post) => <PostCard key={post._id} post={post} />)}
+        </div>
           {showMore && (
             <button
               className="text-teal-500 text-lg hover:underline p-7 w-full"
@@ -163,7 +164,6 @@ function Search() {
               Show More
             </button>
           )}
-        </div>
       </div>
     </div>
   );
