@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
+const placeRoute = require('./routes/placeRoute');
 const commentRoute = require('./routes/commentRoute');
 const cookieParser = require('cookie-parser');
 
@@ -24,6 +25,7 @@ app.use(cors({
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
+app.use("/api/places", placeRoute);
 
 // routes
 app.get("/", (req, res ) => {

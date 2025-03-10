@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import RequireAuth from "./components/RequireAuth";
@@ -8,6 +8,8 @@ import Logout from "./pages/Logout";
 import About from "./pages/About";
 import Dashboard from "./pages/Dashboard";
 import Tours from "./pages/Tours";
+import Place from "./pages/Place";
+import PlaceDetails from "./pages/PlaceDetails";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
@@ -25,27 +27,39 @@ function App() {
         <ScrollToTop />
         <Header />
         <Routes>
+          {/* Protected Home Page */}
           <Route
             index
             element={
               <RequireAuth>
-                {" "}
-                <HomePage />{" "}
+                <HomePage />
               </RequireAuth>
             }
           />
+          
+          {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/logout" element={<Logout />} />
+
+          {/* General Pages */}
           <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/places" element={<Place />} />
+          <Route path="/place/:placeId" element={<PlaceDetails />} /> {/* ✅ New Route */}
+
+          {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
+
+          {/* Admin Routes */}
           <Route element={<OnlyAdminPrivateRoute />}>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/update-post/:postId" element={<UpdatePost />} />
           </Route>
+
+          {/* Blog & Tours */}
           <Route path="/tours" element={<Tours />} />
           <Route path="/post/:postslug" element={<PostPage />} />
         </Routes>
