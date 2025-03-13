@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
 import CreatePost from "./pages/CreatePost";
+import CreatePlace from "./pages/CreatePlace";
 import UpdatePost from "./pages/UpdatePost";
 import PostPage from "./pages/PostPage";
 import ScrollToTop from "./components/ScrollToTop";
@@ -57,6 +58,7 @@ function App() {
           <Route element={<OnlyAdminPrivateRoute />}>
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/update-post/:postId" element={<UpdatePost />} />
+            <Route path="/create-place" element={<CreatePlace />} />
           </Route>
 
           {/* Blog & Tours */}

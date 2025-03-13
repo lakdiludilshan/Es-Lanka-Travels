@@ -64,57 +64,60 @@ const DashPlaces = () => {
       ) : places.length > 0 ? (
         <>
           <Table hoverable className="shadow-md">
-            <Table.Head>
-              <Table.HeadCell>Date Updated</Table.HeadCell>
-              <Table.HeadCell>Place Image</Table.HeadCell>
-              <Table.HeadCell>Place Name</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              {currentUser?.isAdmin && (
-                <>
-                  <Table.HeadCell>Delete</Table.HeadCell>
-                  <Table.HeadCell>Edit</Table.HeadCell>
-                </>
-              )}
-            </Table.Head>
-            {places.map((place) => (
-              <Table.Body key={place._id} className="divide-y">
-                <Table.Row className="bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{new Date(place.updatedAt).toLocaleDateString()}</Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/place/${place._id}`}>
-                      <img src={place.imageUrl} alt={place.name} className="w-20 h-10 object-cover bg-gray-500" />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link className="font-medium text-gray-900 dark:text-white" to={`/place/${place._id}`}>
-                      {place.name}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>{place.category}</Table.Cell>
-                  {currentUser?.isAdmin && (
-                    <>
-                      <Table.Cell>
-                        <span
-                          onClick={() => {
-                            setShowModal(true);
-                            setPlaceIdToDelete(place._id);
-                          }}
-                          className="font-medium text-red-500 hover:underline cursor-pointer"
-                        >
-                          Delete
-                        </span>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Link className="text-teal-500 hover:underline cursor-pointer" to={`/update-place/${place._id}`}>
-                          Edit
-                        </Link>
-                      </Table.Cell>
-                    </>
-                  )}
-                </Table.Row>
-              </Table.Body>
-            ))}
-          </Table>
+  <Table.Head>
+    <Table.HeadCell>Date Updated</Table.HeadCell>
+    <Table.HeadCell>Place Image</Table.HeadCell>
+    <Table.HeadCell>Place Name</Table.HeadCell>
+    <Table.HeadCell>Category</Table.HeadCell>
+    <Table.HeadCell>Budget</Table.HeadCell>
+    {currentUser?.isAdmin && (
+      <>
+        <Table.HeadCell>Delete</Table.HeadCell>
+        <Table.HeadCell>Edit</Table.HeadCell>
+      </>
+    )}
+  </Table.Head>
+  {places.map((place) => (
+    <Table.Body key={place._id} className="divide-y">
+      <Table.Row className="bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
+        <Table.Cell>{new Date(place.updatedAt).toLocaleDateString()}</Table.Cell>
+        <Table.Cell>
+          <Link to={`/place/${place._id}`}>
+            <img src={place.imageUrl} alt={place.name} className="w-20 h-10 object-cover bg-gray-500" />
+          </Link>
+        </Table.Cell>
+        <Table.Cell>
+          <Link className="font-medium text-gray-900 dark:text-white" to={`/place/${place._id}`}>
+            {place.name}
+          </Link>
+        </Table.Cell>
+        <Table.Cell>{place.category}</Table.Cell>
+        <Table.Cell>{place.budget ? `$${place.budget.adult} / $${place.budget.child}` : "No budget available"}</Table.Cell>
+        {currentUser?.isAdmin && (
+          <>
+            <Table.Cell>
+              <span
+                onClick={() => {
+                  setShowModal(true);
+                  setPlaceIdToDelete(place._id);
+                }}
+                className="font-medium text-red-500 hover:underline cursor-pointer"
+              >
+                Delete
+              </span>
+            </Table.Cell>
+            <Table.Cell>
+              <Link className="text-teal-500 hover:underline cursor-pointer" to={`/update-place/${place._id}`}>
+                Edit
+              </Link>
+            </Table.Cell>
+          </>
+        )}
+      </Table.Row>
+    </Table.Body>
+  ))}
+</Table>
+
         </>
       ) : (
         <p>No places found</p>

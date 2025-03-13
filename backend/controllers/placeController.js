@@ -7,26 +7,49 @@ const createPlace = async (req, res, next) => {
   try {
     const { name, location, category, description, imageUrl, coordinates, budget } = req.body;
 
+    // Basic Validation
+    if (!name || !location || !category || !coordinates || !budget) {
+      return next(errorHandler(400, "All fields are required!"));
+    }
+
+    if (!coordinates.lat || !coordinates.lng) {
+      return next(errorHandler(400, "Valid coordinates are required!"));
+    }
+
+    if (!budget.adult || !budget.child) {
+      return next(errorHandler(400, "Valid budget for adult and child is required!"));
+    }
+
+    // Check if the user is an admin
     if (!req.user.isAdmin) {
       return next(errorHandler(403, "Only admins can add places."));
     }
 
+    // Create a new place object
     const newPlace = new Place({
       name,
       location,
       category,
       description,
-      imageUrl,
+      imageUrl, // Make sure imageUrl is properly set (maybe from Firebase or file upload)
       coordinates,
       budget,
     });
 
+    // Save the new place to the database
     await newPlace.save();
-    return res.status(201).json(newPlace);
+
+    // Send back the created place
+    return res.status(201).json({
+      message: "Place created successfully!",
+      place: newPlace,
+    });
   } catch (error) {
-    return next(error);
+    console.error(error); // Log the error for debugging
+    return next(errorHandler(500, "Internal Server Error"));
   }
 };
+
 
 // Get all places
 const getPlaces = async (req, res) => {
