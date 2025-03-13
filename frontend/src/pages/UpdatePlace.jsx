@@ -1,21 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Select, TextInput, FileInput, Button, Alert } from "flowbite-react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { getStorage } from "firebase/storage";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { useNavigate, useParams } from "react-router-dom";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
 
-const CreatePlace = () => {
-    const { placeId } = useParams();
+const UpdatePlace = () => {
+  const { placeId } = useParams();
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
-  const [publishError, setPublishError] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     location: "",
@@ -25,7 +27,21 @@ const CreatePlace = () => {
     coordinates: { lat: "", lng: "" },
     budget: { adult: "", child: "" },
   });
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!placeId) return;
+    const fetchPlace = async () => {
+      try {
+        const res = await fetch(`/api/places/${placeId}`);
+        if (!res.ok) throw new Error("Failed to fetch place details");
+        const data = await res.json();
+        setFormData(data);
+      } catch (error) {
+        console.error("Error fetching place:", error);
+      }
+    };
+    fetchPlace();
+  }, [placeId]);
 
   const handleUploadImage = async () => {
     try {
@@ -38,6 +54,7 @@ const CreatePlace = () => {
       const fileName = new Date().getTime() + "-" + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
+
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -60,53 +77,49 @@ const CreatePlace = () => {
     } catch (error) {
       setImageUploadError("Image upload failed");
       setImageUploadProgress(null);
-      console.log(error);
+      console.error(error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/places/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await fetch(`/api/places/edit/${placeId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (!res.ok) {
-        setPublishError(data.message);
+        setUpdateError(data.message);
         return;
       }
-      if (res.ok) {
-        setPublishError(null);
-        navigate(`/place/${placeId}`); 
-      }
+      setUpdateError(null);
+      navigate(`/place/${placeId}`);
     } catch (error) {
-      setPublishError("Failed to add place");
+      setUpdateError("Failed to update place");
     }
   };
 
   return (
     <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl my-7 font-semibold">Add New Place</h1>
+      <h1 className="text-center text-3xl my-7 font-semibold">Update Place</h1>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
             placeholder="Place Name"
             required
-            id="name"
             className="flex-1"
+            value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
           <TextInput
             type="text"
             placeholder="Location"
             required
-            id="location"
             className="flex-1"
+            value={formData.location}
             onChange={(e) =>
               setFormData({ ...formData, location: e.target.value })
             }
@@ -114,6 +127,7 @@ const CreatePlace = () => {
         </div>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <Select
+            value={formData.category}
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
@@ -123,14 +137,13 @@ const CreatePlace = () => {
             <option value="Wildlife">Wildlife</option>
             <option value="Beach">Beach</option>
             <option value="Hiking">Hiking</option>
-            {/* Add other categories as needed */}
           </Select>
           <TextInput
             type="text"
             placeholder="Latitude"
             required
-            id="latitude"
             className="flex-1"
+            value={formData.coordinates.lat}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -142,8 +155,8 @@ const CreatePlace = () => {
             type="text"
             placeholder="Longitude"
             required
-            id="longitude"
             className="flex-1"
+            value={formData.coordinates.lng}
             onChange={(e) =>
               setFormData({
                 ...formData,
@@ -188,12 +201,12 @@ const CreatePlace = () => {
         )}
         <textarea
           placeholder="Description"
-          id="description"
-          className="mb-4 p-2 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 rounded-md w-full"
           rows="4"
+          value={formData.description}
           onChange={(e) =>
             setFormData({ ...formData, description: e.target.value })
           }
+          className="mb-4 p-2 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 rounded-md w-full"
         />
         <div className="flex gap-4 sm:flex-row justify-between">
           <div className="flex-1">
@@ -207,6 +220,7 @@ const CreatePlace = () => {
                 placeholder="Adult Price"
                 required
                 id="adult"
+                value={formData.budget.adult}
                 className="flex-1 p-2"
                 onChange={(e) =>
                   setFormData({
@@ -228,6 +242,7 @@ const CreatePlace = () => {
                 placeholder="Child Price"
                 required
                 id="child"
+                value={formData.budget.child}
                 className="flex-1 p-2"
                 onChange={(e) =>
                   setFormData({
@@ -241,20 +256,16 @@ const CreatePlace = () => {
         </div>
 
         <Button
-          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
           type="submit"
+          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
           size="lg"
         >
-          Add Place
+          Update Place
         </Button>
-        {publishError && (
-          <Alert color="failure" className="mt-5">
-            {publishError}
-          </Alert>
-        )}
+        {updateError && <Alert color="failure">{updateError}</Alert>}
       </form>
     </div>
   );
 };
 
-export default CreatePlace;
+export default UpdatePlace;

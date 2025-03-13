@@ -17,11 +17,11 @@ const DashPosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`api/posts/getposts?userId=${currentUser._id}`);
+        const res = await fetch(`/api/posts/getposts?userId=${currentUser._id}&limit=5`);
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
-          if (data.posts.length < 9) {
+          if (data.posts.length < 5) {
             setShowMore(false);
           }
         }
@@ -169,7 +169,7 @@ const DashPosts = () => {
           {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full text-teal-500 self-center text-sm py-7"
+              className="w-full text-teal-500 self-center text-sm py-4"
             >
               Show more
             </button>
@@ -178,6 +178,17 @@ const DashPosts = () => {
       ) : (
         <p>No posts found</p>
       )}
+      
+      <Button
+              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full "
+              type="submit"
+              size="lg"
+            >
+              <Link to="/create-post" className="text-white">
+                Add Post
+              </Link>
+            </Button>
+
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}

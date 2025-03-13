@@ -17,6 +17,7 @@ import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
 import CreatePost from "./pages/CreatePost";
 import CreatePlace from "./pages/CreatePlace";
 import UpdatePost from "./pages/UpdatePost";
+import UpdatePlace from "./pages/UpdatePlace";
 import PostPage from "./pages/PostPage";
 import ScrollToTop from "./components/ScrollToTop";
 import Search from "./pages/Search";
@@ -59,6 +60,8 @@ function App() {
             <Route path="/create-post" element={<CreatePost />} />
             <Route path="/update-post/:postId" element={<UpdatePost />} />
             <Route path="/create-place" element={<CreatePlace />} />
+            <Route path="/update-place/:placeId" element={<UpdatePlace />} />
+
           </Route>
 
           {/* Blog & Tours */}
