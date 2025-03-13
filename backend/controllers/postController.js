@@ -31,9 +31,6 @@ const createPost = async (req, res, next) => {
 const getPosts = async (req, res, next) => {
   try {
 
-    console.log("Get request received for posts");
-    console.log("Query parameters:", req.query);
-
     const startindex = parseInt(req.query.startIndex) || 0;
     let limit = 0;
     if (req.query.limit) {

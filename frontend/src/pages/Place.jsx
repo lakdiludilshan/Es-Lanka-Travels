@@ -8,23 +8,24 @@ const Place = () => {
   const [error, setError] = useState(null);      // ✅ Track errors
 
   useEffect(() => {
-    const fetchPlaces = async () => {
-      try {
-        const res = await fetch("/api/places/all");
-        if (!res.ok) {
-          throw new Error("Failed to fetch places"); // Handle HTTP errors
-        }
-        const data = await res.json();
-        setPlaces(data);
-      } catch (error) {
-        console.error("Error fetching places:", error);
-        setError("Failed to load places. Please try again.");
-      } finally {
-        setLoading(false);
+  const fetchPlaces = async () => {
+    try {
+      const res = await fetch("/api/places/all"); // No userId in URL
+      if (!res.ok) {
+        throw new Error("Failed to fetch places"); // Handle HTTP errors
       }
-    };
-    fetchPlaces();
-  }, []);
+      const data = await res.json();
+      setPlaces(Array.isArray(data.places) ? data.places : []); // Ensure `places` is always an array
+    } catch (error) {
+      setError("Failed to load places. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchPlaces();
+}, []); // Runs once on mount
+
 
   return (
     <div>
