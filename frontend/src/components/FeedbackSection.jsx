@@ -21,7 +21,6 @@ function FeedbackSection({ placeId }) {
         if (res.ok) {
           const data = await res.json();
           setFeedbacks(data);
-          console.log(data);
         }
       } catch (error) {
         console.log(error.message);
