@@ -7,6 +7,7 @@ const userRoute = require('./routes/userRoute');
 const postRoute = require('./routes/postRoute');
 const placeRoute = require('./routes/placeRoute');
 const commentRoute = require('./routes/commentRoute');
+const feedbackRoute = require('./routes/feedbackRoute');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 app.use("/api/comments", commentRoute);
 app.use("/api/places", placeRoute);
+app.use("/api/feedbacks", feedbackRoute);
 
 // routes
 app.get("/", (req, res ) => {

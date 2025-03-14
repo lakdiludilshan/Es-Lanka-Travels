@@ -31,7 +31,7 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (feedback.length > 500) { // Increase character limit for feedback
+    if (feedback.length > 2000) { // Increase character limit for feedback
       return;
     }
     try {
@@ -110,14 +110,14 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
         >
           <Textarea
             placeholder="Write your feedback..."
-            rows="5" // Increased rows for feedback
-            maxLength="500" // Increased max length
+            rows="7" // Increased rows for feedback
+            maxLength="2000" // Increased max length
             onChange={(e) => setFeedback(e.target.value)} // Change `setComment` to `setFeedback`
             value={feedback} // Change `comment` to `feedback`
           />
           <div className="flex justify-between items-center mt-5">
             <p className="text-gray-500 text-xs">
-              {500 - feedback.length} characters remaining
+              {2000 - feedback.length} characters remaining
             </p>
             <Button outline gradientDuoTone="purpleToBlue" type="submit">
               Submit
@@ -135,7 +135,7 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
       ) : (
         <>
           <div className="text-sm my-5 flex items-center gap-1">
-            <p>Feedback</p> {/* Changed text */}
+            <p>Feedback</p>
             <div className="border border-gray-400 py-1 px-2 rounded-sm">
               {feedbacks.length}
             </div>
