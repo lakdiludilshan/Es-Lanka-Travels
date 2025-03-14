@@ -138,7 +138,7 @@ const DashPlaces = () => {
         <p>No places found</p>
       )}
       {/* Add Place Button */}
-      <Button className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full " type="submit" size="lg">
+      <Button className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full" type="submit" size="lg">
         <Link to="/create-place" className="text-white">Add Place</Link>
       </Button>
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import CallToAction from "../components/CallToAction";
+import FeedbackSection from "../components/FeedbackSection";
 
 const PlaceDetails = () => {
   const { placeId } = useParams();
@@ -77,6 +79,10 @@ const PlaceDetails = () => {
           {isSubmitting ? "Submitting..." : "Submit Rating"}
         </button>
       </div>
+      <div className="mx-auto max-w-4xl w-full py-3">
+              <CallToAction/>
+          </div>
+          {place && <FeedbackSection placeId={place._id} />}
     </div>
   );
 };
