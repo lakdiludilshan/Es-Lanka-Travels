@@ -1,22 +1,23 @@
-import { Alert, Button, Textarea, Modal } from "flowbite-react"; // Removed TextInput as it's not used
+import { Alert, Button, Textarea, Modal } from "flowbite-react"; 
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import Feedback from "./Feedback";
 
-function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
+function FeedbackSection({ placeId }) {
   const { currentUser } = useSelector((state) => state.user);
-  const [feedback, setFeedback] = useState(""); // Change `comment` to `feedback`
+  const [feedback, setFeedback] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [feedbackToDelete, setFeedbackToDelete] = useState(null); // Change `commentToDelete` to `feedbackToDelete`
-  const [feedbackError, setFeedbackError] = useState(null); // Change `commentError` to `feedbackError`
-  const [feedbacks, setFeedbacks] = useState([]); // Change `comments` to `feedbacks`
+  const [feedbackToDelete, setFeedbackToDelete] = useState(null); 
+  const [feedbackError, setFeedbackError] = useState(null); 
+  const [feedbacks, setFeedbacks] = useState([]); 
   const navigate = useNavigate();
 
   useEffect(() => {
     const getFeedbacks = async () => {
       try {
-        const res = await fetch(`/api/feedbacks/getplacefeedbacks/${placeId}`); // Change API endpoint
+        const res = await fetch(`/api/feedbacks/getplacefeedbacks/${placeId}`); 
         if (res.ok) {
           const data = await res.json();
           setFeedbacks(data);
@@ -27,22 +28,22 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
       }
     };
     getFeedbacks();
-  }, [placeId]); // Change `postId` to `placeId`
+  }, [placeId]); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (feedback.length > 2000) { // Increase character limit for feedback
+    if (feedback.length > 2000) {
       return;
     }
     try {
-      const res = await fetch("/api/feedbacks/create", { // Change API endpoint
+      const res = await fetch("/api/feedbacks/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          content: feedback, // Change `comment` to `feedback`
-          placeId, // Change `postId` to `placeId`
+          content: feedback, 
+          placeId, 
           userId: currentUser._id,
         }),
       });
@@ -50,14 +51,50 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
       if (res.ok) {
         setFeedback("");
         setFeedbackError(null);
-        setFeedbacks([data, ...feedbacks]); // Change `comments` to `feedbacks`
+        setFeedbacks([data, ...feedbacks]); 
       }
     } catch (error) {
       setFeedbackError(error.message);
     }
   };
 
-  const handleDelete = async (feedbackId) => { // Change `commentId` to `feedbackId`
+  const handleLike = async (feedbackId) => {
+    try {
+      if (!currentUser) {
+        navigate("/login");
+        return;
+      }
+      const res = await fetch(`/api/feedbacks/likefeedback/${feedbackId}`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFeedbacks(
+          feedbacks.map((feedback) =>
+            feedback._id === feedbackId
+              ? {
+                  ...feedback,
+                  likes: data.likes,
+                  numberOfLikes: data.likes.length,
+                }
+              : feedback
+          )
+        );
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  
+  const handleEdit = async (feedback, editedContent) => {
+    setFeedbacks(
+      feedbacks.map((f) =>
+        f._id === feedback._id ? { ...f, content: editedContent } : f
+      )
+    );
+  };
+
+  const handleDelete = async (feedbackId) => {
     setShowModal(false);
     try {
       if (!currentUser) {
@@ -65,13 +102,15 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
         return;
       }
       const res = await fetch(
-        `/api/feedbacks/deletefeedback/${feedbackToDelete}`, // Change API endpoint
+        `/api/feedbacks/deletefeedback/${feedbackToDelete}`, 
         {
           method: "DELETE",
         }
       );
       if (res.ok) {
-        setFeedbacks(feedbacks.filter((feedback) => feedback._id !== feedbackId)); // Change `comments` to `feedbacks`
+        setFeedbacks(
+          feedbacks.filter((feedback) => feedback._id !== feedbackId)
+        ); 
       }
     } catch (error) {
       console.log(error.message);
@@ -97,7 +136,7 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
         </div>
       ) : (
         <div className="text-sm text-teal-500 my-5 flex gap-1">
-          <p>Sign in to leave feedback</p> {/* Changed text */}
+          <p>Sign in to leave feedback</p> 
           <Link to={"/login"} className="text-blue-500 hover:underline">
             Sign in
           </Link>
@@ -110,10 +149,10 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
         >
           <Textarea
             placeholder="Write your feedback..."
-            rows="7" // Increased rows for feedback
-            maxLength="2000" // Increased max length
-            onChange={(e) => setFeedback(e.target.value)} // Change `setComment` to `setFeedback`
-            value={feedback} // Change `comment` to `feedback`
+            rows="7" 
+            maxLength="2000" 
+            onChange={(e) => setFeedback(e.target.value)} 
+            value={feedback} 
           />
           <div className="flex justify-between items-center mt-5">
             <p className="text-gray-500 text-xs">
@@ -125,12 +164,12 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
           </div>
           {feedbackError && (
             <Alert color="failure" className="mt-5">
-              {feedbackError} {/* Change `commentError` to `feedbackError` */}
+              {feedbackError} 
             </Alert>
           )}
         </form>
       )}
-      {feedbacks.length === 0 ? ( // Change `comments` to `feedbacks`
+      {feedbacks.length === 0 ? ( 
         <p className="text-sm my-5">No feedback yet!</p>
       ) : (
         <>
@@ -140,27 +179,17 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
               {feedbacks.length}
             </div>
           </div>
-          {feedbacks.map((feedback) => ( // Change `comment` to `feedback`
-            <div
+          {feedbacks.map((feedback) => (
+            <Feedback
               key={feedback._id}
-              className="border p-3 rounded-md my-2 bg-gray-50"
-            >
-              <p className="text-sm text-gray-600">{feedback.content}</p>
-              <div className="flex justify-end mt-2">
-                {currentUser?._id === feedback.userId && (
-                  <Button
-                    color="failure"
-                    size="xs"
-                    onClick={() => {
-                      setShowModal(true);
-                      setFeedbackToDelete(feedback._id); // Change `commentToDelete` to `feedbackToDelete`
-                    }}
-                  >
-                    Delete
-                  </Button>
-                )}
-              </div>
-            </div>
+              feedback={feedback}
+              onLike={handleLike}
+              onEdit={handleEdit}
+              onDelete={(feedbackId) => {
+                setShowModal(true);
+                setFeedbackToDelete(feedbackId);
+              }}
+            />
           ))}
         </>
       )}
@@ -175,12 +204,13 @@ function FeedbackSection({ placeId }) { // Change `postId` to `placeId`
           <div className="text-center">
             <HiOutlineExclamationCircle className=" h-14 w-14 text-gray-400 dark:text-gray-200 mb-4 mx-auto" />
             <h3 className="text-lg text-gray-500 dark:text-gray-400 mb-5">
-              Are you sure you want to delete this feedback? {/* Changed text */}
+              Are you sure you want to delete this feedback?{" "}
+              {/* Changed text */}
             </h3>
             <div className="flex justify-center gap-4">
               <Button
                 color="failure"
-                onClick={() => handleDelete(feedbackToDelete)} // Change `commentToDelete` to `feedbackToDelete`
+                onClick={() => handleDelete(feedbackToDelete)}
               >
                 Yes, I'm sure
               </Button>
