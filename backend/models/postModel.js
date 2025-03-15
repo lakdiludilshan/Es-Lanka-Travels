@@ -14,10 +14,11 @@ const postSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    image: {
-        type: 'string',
-        default: 'https://media.sproutsocial.com/uploads/2022/05/How-to-post-on-instagram-from-pc.jpg',
-
+    images: {
+        type: [String],
+        default: [
+          "https://media.sproutsocial.com/uploads/2022/05/How-to-post-on-instagram-from-pc.jpg",
+        ],
     },
     category: {
         type: 'string',

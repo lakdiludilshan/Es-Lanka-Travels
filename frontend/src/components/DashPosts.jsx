@@ -17,7 +17,9 @@ const DashPosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch(`/api/posts/getposts?userId=${currentUser._id}&limit=5`);
+        const res = await fetch(
+          `/api/posts/getposts?userId=${currentUser._id}&limit=5`
+        );
         const data = await res.json();
         if (res.ok) {
           setUserPosts(data.posts);
@@ -61,10 +63,6 @@ const DashPosts = () => {
           method: "DELETE",
         }
       );
-
-      console.log(postIdToDelete);
-      console.log(currentUser._id);
-      console.log(res.data);
       const data = await res.json();
       if (res.ok) {
         setUserPosts((prev) =>
@@ -77,29 +75,6 @@ const DashPosts = () => {
       console.log(error.message);
     }
   };
-
-  // const deleteUserPosts = async () => {
-  //   setShowModal(false);
-
-  //   try {
-  //     const response = await fetch(
-  //       `/api/posts/deletepost/${postIdToDelete}/${currentUser._id}`,
-  //       {
-  //         method: "DELETE",
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setUserPosts((prev) =>
-  //         prev.filter((post) => post._id !== postIdToDelete)
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
 
   return (
     <div className="table-auto overflow-x-scroll md:mx-auto p-3 scrollbar">
@@ -116,55 +91,62 @@ const DashPosts = () => {
                 <span>Edit</span>
               </Table.HeadCell>
             </Table.Head>
-            {userPosts.map((post, index) => (
-              <Table.Body key={index} className="devide-y">
-                <Table.Row className="bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>
-                    {new Date(post.updatedAt).toLocaleDateString()}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="w-20 h-10 object-cover bg-gray-500"
-                      />
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="font-medium text-gray-900 dark:text-white"
-                      to={`/post/${post.slug}`}
-                    >
-                      {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link to={`/post/${post.slug}`}>{post.category}</Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <span
-                      onClick={() => {
-                        setShowModal(true);
-                        setPostIdToDelete(post._id);
-                        console.log("post id" + post._id);
-                      }}
-                      className="font-medium text-red-500 hover:underline cursor-pointer"
-                    >
-                      Delete
-                    </span>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link
-                      className="text-teal-500 hover:underline cursor-pointer"
-                      to={`/update-post/${post._id}`}
-                    >
-                      <span>Edit</span>
-                    </Link>
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            ))}
+            {userPosts.map((post, index) => {
+              // Get the first image if there are multiple images
+              const imageSrc =
+                Array.isArray(post.images) && post.images.length > 0
+                  ? post.images[0]
+                  : post.image;
+
+              return (
+                <Table.Body key={index} className="devide-y">
+                  <Table.Row className="bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Cell>
+                      {new Date(post.updatedAt).toLocaleDateString()}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link to={`/post/${post.slug}`}>
+                        <img
+                          src={imageSrc}
+                          alt={post.title}
+                          className="w-20 h-10 object-cover bg-gray-500"
+                        />
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link
+                        className="font-medium text-gray-900 dark:text-white"
+                        to={`/post/${post.slug}`}
+                      >
+                        {post.title}
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link to={`/post/${post.slug}`}>{post.category}</Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <span
+                        onClick={() => {
+                          setShowModal(true);
+                          setPostIdToDelete(post._id);
+                        }}
+                        className="font-medium text-red-500 hover:underline cursor-pointer"
+                      >
+                        Delete
+                      </span>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link
+                        className="text-teal-500 hover:underline cursor-pointer"
+                        to={`/update-post/${post._id}`}
+                      >
+                        <span>Edit</span>
+                      </Link>
+                    </Table.Cell>
+                  </Table.Row>
+                </Table.Body>
+              );
+            })}
           </Table>
           {showMore && (
             <button
@@ -178,16 +160,16 @@ const DashPosts = () => {
       ) : (
         <p>No posts found</p>
       )}
-      
+
       <Button
-              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full "
-              type="submit"
-              size="lg"
-            >
-              <Link to="/create-post" className="text-white">
-                Add Post
-              </Link>
-            </Button>
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full "
+        type="submit"
+        size="lg"
+      >
+        <Link to="/create-post" className="text-white">
+          Add Post
+        </Link>
+      </Button>
 
       <Modal
         show={showModal}

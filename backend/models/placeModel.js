@@ -12,7 +12,7 @@ const placeSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: true, // Example: "Cultural", "Wildlife", "Beach"
+      required: true, 
     },
     description: {
       type: String,
@@ -25,12 +25,12 @@ const placeSchema = new mongoose.Schema(
       lng: { type: Number, required: true },
     },
     budget: {
-      adult: { type: Number, required: true }, // Price per adult
-      child: { type: Number, required: true }, // Price per child
+      adult: { type: Number, required: true }, 
+      child: { type: Number, required: true }, 
     },
     ratings: {
-      averageRating: { type: Number, default: 0 }, // Average rating (1-5)
-      ratingCount: { type: Number, default: 0 }, // Total number of ratings
+      averageRating: { type: Number, default: 0 }, 
+      ratingCount: { type: Number, default: 0 }, 
     },
   },
   { timestamps: true }

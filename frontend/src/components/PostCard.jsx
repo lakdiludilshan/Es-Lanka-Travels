@@ -2,12 +2,15 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 function PostCard({ post }) {
+  // Get the first image if there are multiple, or just the single image
+  const imageSrc = Array.isArray(post.images) && post.images.length > 0 ? post.images[0] : post.image;
+
   return (
     <div className="group relative w-full border border-teal-500 hover:border-2 h-[350px] overflow-hidden rounded-lg
     sm:w-[430px] transition-all">
       <Link to={`/post/${post.slug}`}>
         <img
-          src={post.image}
+          src={imageSrc}
           alt="post cover"
           className="h-[260px] w-full object-cover group-hover:h-[200px] transition-all
           duration-300 z-20"

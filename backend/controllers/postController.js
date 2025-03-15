@@ -3,12 +3,15 @@ const { errorHandler } = require("../utils/error");
 
 const createPost = async (req, res, next) => {
   console.log(req.body);
+
   if (!req.user.isAdmin) {
     return next(errorHandler(403, "Unauthorized to create a post"));
   }
+
   if (!req.body.title || !req.body.content) {
     return next(errorHandler(400, "Title and content are required"));
   }
+
   const slug = req.body.title
     .toLowerCase()
     .split(" ")
@@ -19,7 +22,9 @@ const createPost = async (req, res, next) => {
     ...req.body,
     slug,
     userId: req.user.id,
+    images: req.body.images || [],
   });
+
   try {
     const savedPost = await newPost.save();
     res.status(201).json(savedPost);
@@ -30,7 +35,6 @@ const createPost = async (req, res, next) => {
 
 const getPosts = async (req, res, next) => {
   try {
-
     const startindex = parseInt(req.query.startIndex) || 0;
     let limit = 0;
     if (req.query.limit) {
@@ -78,22 +82,25 @@ const getPosts = async (req, res, next) => {
 };
 
 const deletePost = async (req, res, next) => {
-  const { id } = req.params;
+  const { postId, userId } = req.params;
 
   // Check authorization properly
-  if (!req.user.isAdmin && req.user._id.toString() !== userId) {
+  if (!req.user.isAdmin && req.user.id !== userId) {
     return next(errorHandler(403, "Unauthorized to delete this post"));
   }
+
   try {
-    await Post.findByIdAndDelete(id);
-    res.status(200).json("the post has been deleted");
+    const deletedPost = await Post.findByIdAndDelete(postId);
+    if (!deletedPost) {
+      return next(errorHandler(404, "Post not found"));
+    }
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     next(error);
   }
 };
 
 const updatePost = async (req, res, next) => {
-  // Check authorization
   if (!req.user || (!req.user.isAdmin && req.user.id !== req.params.userId)) {
     return next(errorHandler(403, "Unauthorized to update this post"));
   }
@@ -103,12 +110,10 @@ const updatePost = async (req, res, next) => {
     console.log("User attempting update:", req.user.id);
     console.log("Update data received:", req.body);
 
-    // Check if postId is valid
     if (!req.params.postId) {
       return next(errorHandler(400, "Post ID is required"));
     }
 
-    // Attempt to update the post
     const updatedPost = await Post.findByIdAndUpdate(
       req.params.postId,
       {
@@ -116,13 +121,12 @@ const updatePost = async (req, res, next) => {
           title: req.body.title,
           content: req.body.content,
           category: req.body.category,
-          image: req.body.image,
+          images: req.body.images || [], // Support multiple images
         },
       },
       { new: true, runValidators: true }
     );
 
-    // If the post is not found
     if (!updatedPost) {
       return next(errorHandler(404, "Post not found"));
     }
@@ -134,6 +138,5 @@ const updatePost = async (req, res, next) => {
     next(errorHandler(500, "Internal Server Error"));
   }
 };
-
 
 module.exports = { createPost, getPosts, deletePost, updatePost };
