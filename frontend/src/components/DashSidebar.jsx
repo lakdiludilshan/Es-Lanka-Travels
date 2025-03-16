@@ -7,6 +7,7 @@ import {
   HiAnnotation,
   HiChartPie,
   HiLocationMarker,
+  HiChatAlt2,
 } from "react-icons/hi";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -111,6 +112,17 @@ export default function DashSidebar() {
                 as="div"
               >
                 Places
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=feedbacks">
+              <Sidebar.Item
+                active={tab === "feedbacks"}
+                icon={HiChatAlt2}
+                as="div"
+              >
+                Feedbacks
               </Sidebar.Item>
             </Link>
           )}

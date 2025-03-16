@@ -40,25 +40,35 @@ const PlaceDetails = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-5">
-      <img src={place.imageUrl} alt={place.name} className="w-full h-[400px] object-cover rounded-lg" />
+      <img
+        src={place.imageUrl}
+        alt={place.name}
+        className="w-full h-[400px] object-cover rounded-lg"
+      />
       <h1 className="text-3xl font-bold mt-4">{place.name}</h1>
       <p className="text-gray-500 italic">{place.category}</p>
       <p className="mt-2">{place.description}</p>
 
       {/* ⭐ Ratings */}
       <div className="flex items-center gap-1 mt-2">
-        <span className="text-yellow-500 text-xl">⭐ {place.ratings.averageRating.toFixed(1)}</span>
-        <span className="text-gray-500">({place.ratings.ratingCount} reviews)</span>
+        <span className="text-yellow-500 text-xl">
+          ⭐ {place.ratings.averageRating.toFixed(1)}
+        </span>
+        <span className="text-gray-500">
+          ({place.ratings.ratingCount} reviews)
+        </span>
       </div>
 
       {/* 💰 Budget */}
       <p className="text-lg font-semibold mt-3">Price per person:</p>
-      <p>👨 Adult: ${place.budget.adult}</p>
-      <p>👶 Child: ${place.budget.child}</p>
-
+      <p>👨 Adult: ${place.budget?.adult ?? "N/A"}</p>
+      <p>👶 Child: ${place.budget?.child ?? "N/A"}</p>
+      
       {/* ⭐ Rate This Place */}
       <div className="mt-4">
-        <label className="block text-lg font-semibold mb-2">Rate this place:</label>
+        <label className="block text-lg font-semibold mb-2">
+          Rate this place:
+        </label>
         <select
           value={rating}
           onChange={(e) => setRating(Number(e.target.value))}
@@ -80,9 +90,9 @@ const PlaceDetails = () => {
         </button>
       </div>
       <div className="mx-auto max-w-4xl w-full py-3">
-              <CallToAction/>
-          </div>
-          {place && <FeedbackSection placeId={place._id} />}
+        <CallToAction />
+      </div>
+      {place && <FeedbackSection placeId={place._id} />}
     </div>
   );
 };

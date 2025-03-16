@@ -171,7 +171,8 @@ const CreatePost = () => {
         <Button
           type="submit"
           size="lg"
-          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"        >
+          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+        >
           Publish
         </Button>
 
