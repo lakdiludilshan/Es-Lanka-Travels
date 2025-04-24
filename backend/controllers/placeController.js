@@ -153,7 +153,7 @@ const getPaginatedPlaces = async (req, res, next) => {
 // Add Rating to a Place
 const addRating = async (req, res, next) => {
   try {
-    const { rating } = req.body; // Rating from 1 to 5
+    const { rating } = req.body;
     const place = await Place.findById(req.params.placeId);
 
     if (!place) {
@@ -164,19 +164,32 @@ const addRating = async (req, res, next) => {
       return next(errorHandler(400, "Rating must be between 1 and 5"));
     }
 
-    // Update ratings
-    const newTotalRatings = place.ratingCount + 1;
-    const newAverageRating = ((place.averageRating * place.ratingCount) + rating) / newTotalRatings;
+    // Ensure ratings object exists
+    if (!place.ratings) {
+      place.ratings = {
+        averageRating: 0,
+        ratingCount: 0,
+      };
+    }
 
-    place.ratingCount = newTotalRatings;
-    place.averageRating = newAverageRating;
+    const currentCount = place.ratings.ratingCount;
+    const currentAvg = place.ratings.averageRating;
+
+    const newTotal = currentCount + 1;
+    const newAvg = ((currentAvg * currentCount) + rating) / newTotal;
+
+    place.ratings.ratingCount = newTotal;
+    place.ratings.averageRating = newAvg;
 
     await place.save();
+
     res.status(200).json({ message: "Rating added", place });
   } catch (error) {
-    next(error);
+    console.error("Error in addRating:", error);
+    next(error); // Pass error to error-handling middleware
   }
 };
+
 
 module.exports = {
   createPlace,

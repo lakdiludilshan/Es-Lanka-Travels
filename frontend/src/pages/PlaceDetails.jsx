@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import CallToAction from "../components/CallToAction";
 import FeedbackSection from "../components/FeedbackSection";
+import { toast } from "react-toastify";
 
 const PlaceDetails = () => {
   const { placeId } = useParams();
@@ -30,8 +31,9 @@ const PlaceDetails = () => {
       await axios.post(`/api/places/${placeId}/rate`, { rating });
       const res = await axios.get(`/api/places/${placeId}`);
       setPlace(res.data);
+      toast.success("Thanks for your rating!");
     } catch (error) {
-      console.error("Error submitting rating:", error);
+      toast.error("Something went wrong. Please try again.");
     }
     setIsSubmitting(false);
   };

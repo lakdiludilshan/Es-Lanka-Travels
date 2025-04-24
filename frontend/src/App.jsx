@@ -48,7 +48,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/search" element={<Search />} />
           <Route path="/places" element={<Place />} />
-          <Route path="/place/:placeId" element={<PlaceDetails />} /> {/* ✅ New Route */}
+          <Route path="/place/:placeId" element={<PlaceDetails />} /> 
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
