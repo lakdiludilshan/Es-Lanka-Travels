@@ -7,6 +7,8 @@ import DashUsers from '../components/DashUsers';
 import DashComments from '../components/DashComments';
 import DashPlaces from '../components/DashPlaces';
 import DashFeedbacks from '../components/DashFeedbacks';
+import DashHotels from '../components/DashHotels';
+import DashReview from '../components/DashReview';
 import DashboardComponent from '../components/DashboardComponent';
 
 const Dashboard = () => {
@@ -34,6 +36,8 @@ const Dashboard = () => {
         {tab === 'dash' && <DashboardComponent />}
         {tab === 'places' && <DashPlaces />}
         {tab === 'feedbacks' && <DashFeedbacks />}
+        {tab === 'hotels' && <DashHotels />}
+        {tab === 'reviews' && <DashReview />}
 
     </div>
   )

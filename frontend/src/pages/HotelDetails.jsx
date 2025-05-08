@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import CallToAction from "../components/CallToAction";
-import FeedbackSection from "../components/FeedbackSection";
 import { toast } from "react-toastify";
+import ReviewSection from "../components/ReviewSection";
 
 const HotelDetails = () => {
   const { hotelId } = useParams();
@@ -97,7 +97,7 @@ const HotelDetails = () => {
         <CallToAction />
       </div>
 
-      {hotel && <FeedbackSection hotelId={hotel._id} />}
+      {hotel && <ReviewSection hotelId={hotel._id} />}
     </div>
   );
 };

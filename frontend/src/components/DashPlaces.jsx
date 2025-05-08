@@ -48,8 +48,12 @@ const DashPlaces = () => {
       });
       const data = await res.json();
       if (res.ok) {
-        setPlaces((prev) => prev.filter((place) => place._id !== placeIdToDelete));
-        setVisiblePlaces((prev) => prev.filter((place) => place._id !== placeIdToDelete));
+        setPlaces((prev) =>
+          prev.filter((place) => place._id !== placeIdToDelete)
+        );
+        setVisiblePlaces((prev) =>
+          prev.filter((place) => place._id !== placeIdToDelete)
+        );
       } else {
         console.error("Delete failed:", data.message);
       }
@@ -89,20 +93,31 @@ const DashPlaces = () => {
             {visiblePlaces.map((place) => (
               <Table.Body key={place._id} className="divide-y">
                 <Table.Row className="bg-gray-200 dark:border-gray-700 dark:bg-gray-800">
-                  <Table.Cell>{new Date(place.updatedAt).toLocaleDateString()}</Table.Cell>
+                  <Table.Cell>
+                    {new Date(place.updatedAt).toLocaleDateString()}
+                  </Table.Cell>
                   <Table.Cell>
                     <Link to={`/place/${place._id}`}>
-                      <img src={place.imageUrl} alt={place.name} className="w-20 h-10 object-cover bg-gray-500" />
+                      <img
+                        src={place.imageUrl}
+                        alt={place.name}
+                        className="w-20 h-10 object-cover bg-gray-500"
+                      />
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link className="font-medium text-gray-900 dark:text-white" to={`/place/${place._id}`}>
+                    <Link
+                      className="font-medium text-gray-900 dark:text-white"
+                      to={`/place/${place._id}`}
+                    >
                       {place.name}
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{place.category}</Table.Cell>
                   <Table.Cell>
-                    {place.budget ? `$${place.budget.adult} / $${place.budget.child}` : "No budget available"}
+                    {place.budget
+                      ? `$${place.budget.adult} / $${place.budget.child}`
+                      : "No budget available"}
                   </Table.Cell>
                   {currentUser?.isAdmin && (
                     <>
@@ -118,7 +133,10 @@ const DashPlaces = () => {
                         </span>
                       </Table.Cell>
                       <Table.Cell>
-                        <Link className="text-teal-500 hover:underline cursor-pointer" to={`/update-place/${place._id}`}>
+                        <Link
+                          className="text-teal-500 hover:underline cursor-pointer"
+                          to={`/update-place/${place._id}`}
+                        >
                           Edit
                         </Link>
                       </Table.Cell>
@@ -129,7 +147,10 @@ const DashPlaces = () => {
             ))}
           </Table>
           {showMore && (
-            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-4">
+            <button
+              onClick={handleShowMore}
+              className="w-full text-teal-500 self-center text-sm py-4"
+            >
               Show more
             </button>
           )}
@@ -138,12 +159,23 @@ const DashPlaces = () => {
         <p>No places found</p>
       )}
       {/* Add Place Button */}
-      <Button className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full" type="submit" size="lg">
-        <Link to="/create-place" className="text-white">Add Place</Link>
+      <Button
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full"
+        type="submit"
+        size="lg"
+      >
+        <Link to="/create-place" className="text-white">
+          Add Place
+        </Link>
       </Button>
 
       {/* Delete Confirmation Modal */}
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">

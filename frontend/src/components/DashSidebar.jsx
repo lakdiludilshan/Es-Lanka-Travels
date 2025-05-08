@@ -9,6 +9,7 @@ import {
   HiLocationMarker,
   HiChatAlt2,
   HiOfficeBuilding,
+  HiStar,
 } from "react-icons/hi";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -73,17 +74,6 @@ export default function DashSidebar() {
             </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (
-            <Link to="/dashboard?tab=posts">
-              <Sidebar.Item
-                active={tab === "posts"}
-                icon={HiDocumentText}
-                as="div"
-              >
-                Posts
-              </Sidebar.Item>
-            </Link>
-          )}
-          {currentUser.isAdmin && (
             <Link to="/dashboard?tab=users">
               <Sidebar.Item
                 active={tab === "users"}
@@ -95,13 +85,24 @@ export default function DashSidebar() {
             </Link>
           )}
           {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=posts">
+              <Sidebar.Item
+                active={tab === "posts"}
+                icon={HiDocumentText}
+                as="div"
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
             <Link to="/dashboard?tab=comments">
               <Sidebar.Item
                 active={tab === "comments"}
                 icon={HiAnnotation}
                 as="div"
               >
-                Comments
+                Post Comments
               </Sidebar.Item>
             </Link>
           )}
@@ -123,7 +124,7 @@ export default function DashSidebar() {
                 icon={HiChatAlt2}
                 as="div"
               >
-                Feedbacks
+                Place Feedbacks
               </Sidebar.Item>
             </Link>
           )}
@@ -135,6 +136,17 @@ export default function DashSidebar() {
                 as="div"
               >
                 Hotels
+              </Sidebar.Item>
+            </Link>
+          )}
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=reviews">
+              <Sidebar.Item
+                active={tab === "reviews"}
+                icon={HiStar} 
+                as="div"
+              >
+                Hotel Reviews
               </Sidebar.Item>
             </Link>
           )}

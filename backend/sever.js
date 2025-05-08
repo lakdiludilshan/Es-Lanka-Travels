@@ -10,6 +10,7 @@ const commentRoute = require('./routes/commentRoute');
 const feedbackRoute = require('./routes/feedbackRoute');
 const preferenceRoute = require('./routes/preferenceRoute');
 const hotelRoutes = require('./routes/hotelRoute');
+const reviewRoutes = require('./routes/reviewRoute');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -32,6 +33,7 @@ app.use("/api/places", placeRoute);
 app.use("/api/feedbacks", feedbackRoute);
 app.use("/api/preferences", preferenceRoute);
 app.use("/api/hotels", hotelRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // routes
 app.get("/", (req, res ) => {

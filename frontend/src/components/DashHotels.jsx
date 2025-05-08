@@ -22,9 +22,10 @@ const DashHotels = () => {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message || "Failed to fetch hotels");
 
-        setHotels(Array.isArray(data.hotels) ? data.hotels : []);
-        setVisibleHotels(data.hotels?.slice(0, 5) || []);
-        setShowMore(data.hotels.length > 5);
+        const hotelList = Array.isArray(data.hotels) ? data.hotels : [];
+        setHotels(hotelList);
+        setVisibleHotels(hotelList.slice(0, 5));
+        setShowMore(hotelList.length > 5);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -44,7 +45,9 @@ const DashHotels = () => {
       const data = await res.json();
       if (res.ok) {
         setHotels((prev) => prev.filter((h) => h._id !== hotelIdToDelete));
-        setVisibleHotels((prev) => prev.filter((h) => h._id !== hotelIdToDelete));
+        setVisibleHotels((prev) =>
+          prev.filter((h) => h._id !== hotelIdToDelete)
+        );
       } else {
         console.error("Delete failed:", data.message);
       }
@@ -80,22 +83,39 @@ const DashHotels = () => {
                 </>
               )}
             </Table.Head>
-            {visibleHotels.map((hotel) => (
-              <Table.Body key={hotel._id} className="divide-y">
-                <Table.Row className="bg-gray-200 dark:bg-gray-800">
-                  <Table.Cell>{new Date(hotel.updatedAt).toLocaleDateString()}</Table.Cell>
+            <Table.Body className="divide-y">
+              {visibleHotels.map((hotel) => (
+                <Table.Row
+                  key={hotel._id}
+                  className="bg-gray-200 dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <Table.Cell>
+                    {new Date(hotel.updatedAt).toLocaleDateString()}
+                  </Table.Cell>
                   <Table.Cell>
                     <Link to={`/hotel/${hotel._id}`}>
-                      <img src={hotel.imageUrl} alt={hotel.name} className="w-20 h-10 object-cover bg-gray-500" />
+                      <img
+                        src={hotel.imageUrls?.[0]}
+                        alt={hotel.name}
+                        className="w-20 h-10 object-cover bg-gray-500"
+                      />
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link to={`/hotel/${hotel._id}`} className="text-gray-900 dark:text-white">
+                    <Link
+                      to={`/hotel/${hotel._id}`}
+                      className="text-gray-900 dark:text-white"
+                    >
                       {hotel.name}
                     </Link>
                   </Table.Cell>
                   <Table.Cell>{hotel.location}</Table.Cell>
-                  <Table.Cell>{hotel.contact || "N/A"}</Table.Cell>
+                  <Table.Cell>
+                    {hotel.contactInfo?.phone ||
+                      hotel.contactInfo?.email ||
+                      hotel.contactInfo?.website ||
+                      "N/A"}
+                  </Table.Cell>
                   {currentUser?.isAdmin && (
                     <>
                       <Table.Cell>
@@ -110,18 +130,25 @@ const DashHotels = () => {
                         </span>
                       </Table.Cell>
                       <Table.Cell>
-                        <Link to={`/update-hotel/${hotel._id}`} className="text-teal-500 hover:underline">
+                        <Link
+                          to={`/update-hotel/${hotel._id}`}
+                          className="text-teal-500 hover:underline"
+                        >
                           Edit
                         </Link>
                       </Table.Cell>
                     </>
                   )}
                 </Table.Row>
-              </Table.Body>
-            ))}
+              ))}
+            </Table.Body>
           </Table>
+
           {showMore && (
-            <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-4">
+            <button
+              onClick={handleShowMore}
+              className="w-full text-teal-500 self-center text-sm py-4"
+            >
               Show more
             </button>
           )}
@@ -130,13 +157,21 @@ const DashHotels = () => {
         <p>No hotels found</p>
       )}
 
-      <Button className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full" size="lg">
+      <Button
+        className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 mt-4 mx-auto w-full"
+        size="lg"
+      >
         <Link to="/create-hotel" className="text-white">
           Add Hotel
         </Link>
       </Button>
 
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
         <Modal.Header />
         <Modal.Body>
           <div className="text-center">
