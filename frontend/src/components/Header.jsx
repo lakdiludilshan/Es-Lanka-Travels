@@ -123,6 +123,9 @@ const Header = () => {
         <Navbar.Link active={path === "/"} as={"div"}>
           <Link to="/places">Places</Link>
         </Navbar.Link>
+        <Navbar.Link active={path === "/"} as={"div"}>
+          <Link to="/hotels">Hotels</Link>
+        </Navbar.Link>
         <Navbar.Link active={path === "/tours"} as={"div"}>
           <Link to="/tours">Tours</Link>
         </Navbar.Link>

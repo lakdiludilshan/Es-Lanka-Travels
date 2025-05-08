@@ -1,56 +1,67 @@
 import React from 'react';
+import { FaUsers, FaGlobeAsia, FaSuitcaseRolling, FaHandsHelping, FaStar } from 'react-icons/fa';
 
 const About = () => {
   return (
-    <div className="dark:text-white min-h-screen px-8 py-12">
-      <div className="max-w-4xl mx-auto space-y-10">
-        <h1 className="text-4xl font-bold border-b-2 dark:border-white pb-4">About Us</h1>
+    <div className="dark:text-white min-h-screen px-5 py-12 bg-gradient-to-b from-white to-amber-50 dark:from-slate-900 dark:to-slate-800">
+      <div className="max-w-6xl mx-auto space-y-16">
+        <h1 className="text-4xl font-extrabold border-b-4 border-amber-500 dark:border-white pb-4 text-center">
+          About <span className="text-teal-400">Es Lanka Travels</span>
+        </h1>
 
-        {/* Introduction */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-2">Who We Are</h2>
+        {/* Who We Are */}
+        <section className="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-8 space-y-4">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <FaUsers className="text-teal-400" /> Who We Are
+          </h2>
           <p className="text-lg">
-            Welcome to <strong>Es Lanka Travels</strong>! We are dedicated to providing the best travel experiences.
-            Add more details about your company’s origin, mission, and passion here.
+            <strong>Es Lanka Travels</strong> is more than a travel agency — we're storytellers of Sri Lanka. With roots in the island's culture and passion for adventure, we specialize in crafting memorable journeys for explorers worldwide.
           </p>
         </section>
 
-        {/* Our Mission */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-2">Our Mission</h2>
+        {/* Mission */}
+        <section className="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-8 space-y-4">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <FaGlobeAsia className="text-teal-400" /> Our Mission
+          </h2>
           <p className="text-lg">
-            To connect travelers with the heart of Sri Lanka.
-            Add more about your values and commitment to customers here.
+            We aim to connect travelers with Sri Lanka’s vibrant soul — from lush jungles to golden beaches, ancient temples to warm village smiles. Our mission is to ensure every moment you spend here becomes a lifelong memory.
           </p>
         </section>
 
-        {/* Our Services */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-2">What We Offer</h2>
-          <ul className="list-disc list-inside text-lg space-y-1">
-            <li>Customizable travel packages</li>
-            <li>Group and solo tours</li>
-            <li>Local guides with deep knowledge of destinations</li>
-            <li>Adventure, cultural, and wellness experiences</li>
-            <li>Airport transfers and accommodation booking</li>
-          </ul>
+        {/* What We Offer */}
+        <section className="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-8">
+          <h2 className="text-2xl font-bold flex items-center gap-2 mb-4">
+            <FaSuitcaseRolling className="text-teal-400" /> What We Offer
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg list-inside">
+            <div>🎯 Customizable travel packages</div>
+            <div>👨‍👩‍👧‍👦 Group and solo tours</div>
+            <div>🧭 Local guides with deep knowledge</div>
+            <div>🌿 Adventure, culture & wellness trips</div>
+            <div>🚕 Airport transfers & hotel bookings</div>
+          </div>
         </section>
 
         {/* Why Choose Us */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-2">Why Choose Us</h2>
+        <section className="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-8 space-y-4">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <FaStar className="text-teal-400" /> Why Choose Us
+          </h2>
           <p className="text-lg">
-            With years of experience and a love for Sri Lanka, we bring you authentic and unforgettable travel moments.
-            Our team is passionate, professional, and focused on your satisfaction.
+            With years of experience and local roots, we bring you handpicked experiences that are genuine and impactful.
+            From the first message to the last goodbye, we ensure every step of your journey is stress-free and spectacular.
           </p>
         </section>
 
         {/* Meet the Team */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-2">Meet Our Team</h2>
+        <section className="bg-white dark:bg-slate-700 shadow-lg rounded-xl p-8 space-y-4">
+          <h2 className="text-2xl font-bold flex items-center gap-2">
+            <FaHandsHelping className="text-teal-400" /> Meet Our Team
+          </h2>
           <p className="text-lg">
-            Our team is made up of seasoned travel experts, local guides, and friendly planners who work tirelessly
-            to ensure your journey is seamless and memorable. Add names, roles, or brief bios here.
+            Our team includes passionate locals, certified guides, and travel planners who live and breathe Sri Lanka.
+            Get to know our people — the heart of Es Lanka — who make your dream trip possible.
           </p>
         </section>
       </div>

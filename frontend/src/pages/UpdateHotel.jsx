@@ -1,0 +1,272 @@
+import React, { useState, useEffect } from "react";
+import { Select, TextInput, FileInput, Button, Alert } from "flowbite-react";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { useNavigate, useParams } from "react-router-dom";
+import { app } from "../firebase";
+import { CircularProgressbar } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+
+const UpdateHotel = () => {
+  const { hotelId } = useParams();
+  const navigate = useNavigate();
+  const [file, setFile] = useState(null);
+  const [imageUploadProgress, setImageUploadProgress] = useState(null);
+  const [imageUploadError, setImageUploadError] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    location: "",
+    category: "",
+    description: "",
+    imageUrl: "",
+    coordinates: { lat: "", lng: "" },
+    roomPricing: { normalRoom: "", deluxeRoom: "" },
+  });
+
+  useEffect(() => {
+    if (!hotelId) return;
+    const fetchHotel = async () => {
+      try {
+        const res = await fetch(`/api/hotels/${hotelId}`);
+        if (!res.ok) throw new Error("Failed to fetch hotel details");
+        const data = await res.json();
+        setFormData(data);
+      } catch (error) {
+        console.error("Error fetching hotel:", error);
+      }
+    };
+    fetchHotel();
+  }, [hotelId]);
+
+  const handleUploadImage = async () => {
+    try {
+      if (!file) {
+        setImageUploadError("No file selected");
+        return;
+      }
+      setImageUploadError(null);
+      const storage = getStorage(app);
+      const fileName = new Date().getTime() + "-" + file.name;
+      const storageRef = ref(storage, fileName);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setImageUploadProgress(progress.toFixed(0));
+        },
+        () => {
+          setImageUploadError("Image upload failed");
+          setImageUploadProgress(null);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageUploadProgress(null);
+            setImageUploadError(null);
+            setFormData({ ...formData, imageUrl: downloadURL });
+          });
+        }
+      );
+    } catch (error) {
+      setImageUploadError("Image upload failed");
+      setImageUploadProgress(null);
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/hotels/edit/${hotelId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setUpdateError(data.message);
+        return;
+      }
+      setUpdateError(null);
+      navigate(`/hotel/${hotelId}`);
+    } catch (error) {
+      setUpdateError("Failed to update hotel");
+    }
+  };
+
+  return (
+    <div className="p-3 max-w-3xl mx-auto min-h-screen">
+      <h1 className="text-center text-3xl my-7 font-semibold">Update Hotel</h1>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-4 sm:flex-row justify-between">
+          <TextInput
+            type="text"
+            placeholder="Hotel Name"
+            required
+            className="flex-1"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          />
+          <TextInput
+            type="text"
+            placeholder="Location"
+            required
+            className="flex-1"
+            value={formData.location}
+            onChange={(e) =>
+              setFormData({ ...formData, location: e.target.value })
+            }
+          />
+        </div>
+        <div className="flex flex-col gap-4 sm:flex-row justify-between">
+          <Select
+            value={formData.category}
+            onChange={(e) =>
+              setFormData({ ...formData, category: e.target.value })
+            }
+          >
+            <option value="">Select Category</option>
+            <option value="Luxury">Luxury</option>
+            <option value="Budget">Budget</option>
+            <option value="Boutique">Boutique</option>
+            <option value="Resort">Resort</option>
+          </Select>
+          <TextInput
+            type="text"
+            placeholder="Latitude"
+            required
+            value={formData.coordinates.lat}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                coordinates: { ...formData.coordinates, lat: e.target.value },
+              })
+            }
+          />
+          <TextInput
+            type="text"
+            placeholder="Longitude"
+            required
+            value={formData.coordinates.lng}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                coordinates: { ...formData.coordinates, lng: e.target.value },
+              })
+            }
+          />
+        </div>
+        <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
+          <FileInput
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files[0])}
+          />
+          <Button
+            type="button"
+            onClick={handleUploadImage}
+            disabled={imageUploadProgress}
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+            size="sm"
+            outline
+          >
+            {imageUploadProgress ? (
+              <div className="w-16 h-16">
+                <CircularProgressbar
+                  value={imageUploadProgress}
+                  text={`${imageUploadProgress || 0}%`}
+                />
+              </div>
+            ) : (
+              "Upload Image"
+            )}
+          </Button>
+        </div>
+        {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
+        {formData.imageUrl && (
+          <img
+            src={formData.imageUrl}
+            alt="hotel"
+            className="w-full h-72 object-cover"
+          />
+        )}
+        <textarea
+          placeholder="Description"
+          rows="4"
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
+          className="mb-4 p-2 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 rounded-md w-full"
+        />
+        <div className="flex gap-4 sm:flex-row justify-between">
+          <div className="flex-1">
+            <label htmlFor="normalRoom" className="block text-sm font-medium">
+              Normal Room Price
+            </label>
+            <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-md">
+              <span className="text-gray-600 dark:text-gray-400 px-2">$</span>
+              <TextInput
+                type="number"
+                required
+                id="normalRoom"
+                value={formData.roomPricing.normalRoom}
+                className="flex-1 p-2"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    roomPricing: {
+                      ...formData.roomPricing,
+                      normalRoom: e.target.value,
+                    },
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="flex-1">
+            <label htmlFor="deluxeRoom" className="block text-sm font-medium">
+              Deluxe Room Price
+            </label>
+            <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-md">
+              <span className="text-gray-600 dark:text-gray-400 px-2">$</span>
+              <TextInput
+                type="number"
+                required
+                id="deluxeRoom"
+                value={formData.roomPricing.deluxeRoom}
+                className="flex-1 p-2"
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    roomPricing: {
+                      ...formData.roomPricing,
+                      deluxeRoom: e.target.value,
+                    },
+                  })
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <Button
+          type="submit"
+          className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+          size="lg"
+        >
+          Update Hotel
+        </Button>
+        {updateError && <Alert color="failure">{updateError}</Alert>}
+      </form>
+    </div>
+  );
+};
+
+export default UpdateHotel;
