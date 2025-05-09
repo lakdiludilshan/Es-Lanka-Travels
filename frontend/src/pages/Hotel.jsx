@@ -6,6 +6,7 @@ const Hotel = () => {
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(6); // initially show 6 hotels
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -25,6 +26,10 @@ const Hotel = () => {
 
     fetchHotels();
   }, []);
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 6); // Show 6 more hotels per click
+  };
 
   return (
     <div className="bg-gradient-to-b from-white to-amber-50 dark:from-slate-900 dark:to-slate-800 min-h-screen">
@@ -66,16 +71,19 @@ const Hotel = () => {
               Featured Hotels
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {hotels.map((hotel) => (
+              {hotels.slice(0, visibleCount).map((hotel) => (
                 <HotelCard key={hotel._id} hotel={hotel} />
               ))}
             </div>
-            <Link
-              to="/search-hotels"
-              className="text-lg text-teal-500 hover:underline text-center"
-            >
-              View all hotels
-            </Link>
+
+            {visibleCount < hotels.length && (
+              <button
+                onClick={handleShowMore}
+                className="mt-4 mx-auto bg-teal-600 text-white px-6 py-2 rounded-full hover:bg-teal-700 transition"
+              >
+                Show More
+              </button>
+            )}
           </>
         ) : (
           <p className="text-center text-gray-500">No hotels found.</p>

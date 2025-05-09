@@ -123,6 +123,8 @@ const CreatePlace = () => {
             <option value="Wildlife">Wildlife</option>
             <option value="Beach">Beach</option>
             <option value="Hiking">Hiking</option>
+            <option value="Historical">Historical</option>
+            
             {/* Add other categories as needed */}
           </Select>
           <TextInput

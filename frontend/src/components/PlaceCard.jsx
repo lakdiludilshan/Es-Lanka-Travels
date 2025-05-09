@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function PlaceCard({ place }) {
   if (!place) {
-    return null; // Prevent rendering if `place` is undefined
+    return null; 
   }
 
   return (
@@ -11,18 +11,17 @@ function PlaceCard({ place }) {
     sm:w-[430px] transition-all">
       <Link to={`/place/${place._id}`}>
         <img
-          src={place.imageUrl || "/default-placeholder.jpg"} // Fallback image
+          src={place.imageUrl || "/default-placeholder.jpg"}
           alt={place.name || "Unknown Place"}
           className="h-[260px] w-full object-cover group-hover:h-[200px] transition-all duration-300 z-20"
         />
       </Link>
-      <div className="p-3 flex flex-col gap-2">
+      <div className="p-3 flex flex-col gap-1">
         <p className="text-lg font-semibold line-clamp-2">{place.name || "Unknown Place"}</p>
         <span className="italic text-sm">{place.category || "No category"}</span>
 
-        {/* Safe check for rating */}
         <p className="text-sm text-gray-500">
-          Rating: {place.averageRating !== undefined ? place.averageRating : "No rating"}
+          Rating: {place.ratings.averageRating !== undefined ? place.ratings.averageRating : "No rating"}
         </p>
 
         <Link to={`/place/${place._id}`}

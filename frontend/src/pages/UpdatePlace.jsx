@@ -137,6 +137,7 @@ const UpdatePlace = () => {
             <option value="Wildlife">Wildlife</option>
             <option value="Beach">Beach</option>
             <option value="Hiking">Hiking</option>
+            <option value="Historical">Historical</option>
           </Select>
           <TextInput
             type="text"

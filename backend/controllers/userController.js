@@ -12,7 +12,11 @@ async function signup(req, res) {
     const hashedPassword = bcrypt.hashSync(password, 8);
 
     //create user with data
-    const userr = await User.create({ username, email, password: hashedPassword });
+    const userr = await User.create({
+      username,
+      email,
+      password: hashedPassword,
+    });
 
     //respond
     res.status(201).json({
@@ -40,7 +44,10 @@ async function login(req, res) {
 
     //create jwt token
     const exp = Date.now() + 1000 * 60 * 60 * 24 * 30;
-    const token = jwt.sign({ sub: user._id, exp, isAdmin: user.isAdmin }, process.env.SECRET);
+    const token = jwt.sign(
+      { sub: user._id, exp, isAdmin: user.isAdmin },
+      process.env.SECRET
+    );
 
     //set cookie
     res.cookie("Authorization", token, {
@@ -63,7 +70,10 @@ async function google(req, res, next) {
   try {
     const user = await User.findOne({ email });
     if (user) {
-      const token = jwt.sign({ sub: user._id, isAdmin: user.isAdmin }, process.env.SECRET);
+      const token = jwt.sign(
+        { sub: user._id, isAdmin: user.isAdmin },
+        process.env.SECRET
+      );
       const { password, ...rest } = user._doc;
       res
         .status(200)
@@ -85,7 +95,10 @@ async function google(req, res, next) {
         profilePicture: googlePhotoUrl,
       });
       await newUser.save();
-      const token = jwt.sign({ sub: newUser._id, isAdmin: newUser.isAdmin }, process.env.SECRET);
+      const token = jwt.sign(
+        { sub: newUser._id, isAdmin: newUser.isAdmin },
+        process.env.SECRET
+      );
       const { password, ...rest } = newUser._doc;
       res
         .status(200)
@@ -118,64 +131,57 @@ function checkAuth(req, res) {
 }
 
 const updateUser = async (req, res, next) => {
-  if (
-    req.body.username == undefined ||
-    req.body.username == null ||
-    req.body.username == ""
-  ) {
+  const { username, email, profilePicture, password } = req.body;
+
+  if (!username?.trim()) {
     return next(errorHandler(400, "Username is required"));
-  } else if (
-    req.body.email == undefined ||
-    req.body.email == null ||
-    req.body.email == ""
-  ) {
+  }
+  if (!email?.trim()) {
     return next(errorHandler(400, "Email is required"));
   }
 
-  if (req.user.id !== req.params._id) {
+  if (req.user.id.toString() !== req.params._id.toString()) {
     return next(errorHandler(403, "You are not allowed to update this user"));
   }
-  if (req.body.password) {
-    if (req.body.password.length < 6) {
-      return next(errorHandler(400, "Password must be at least 6 characters"));
-    }
-    req.body.password = bcrypt.hashSync(req.body.password, 10);
-  }
-  if (req.body.username) {
-    if (req.body.username.length < 5 || req.body.username.length > 20) {
-      return next(
-        errorHandler(400, "Username must be between 5 and 20 characters")
-      );
-    }
-    if (req.body.username !== req.body.username.toLowerCase()) {
-      return next(
-        errorHandler(400, "Username must contain only lowercase letters")
-      );
-    }
-    if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-      return next(
-        errorHandler(400, "Username must contain only letters and numbers")
-      );
-    }
-    console.log("User ID from token:", req.user?._id);
-  }
-  try {
-    console.log("User ID from token:", req.user?._id);
-    console.log(req.body);
 
-    const updateUser = await User.findByIdAndUpdate(
+  if (password && password.length < 6) {
+    return next(errorHandler(400, "Password must be at least 6 characters"));
+  }
+
+  if (username.length < 5 || username.length > 20) {
+    return next(
+      errorHandler(400, "Username must be between 5 and 20 characters")
+    );
+  }
+
+  if (username !== username.toLowerCase()) {
+    return next(
+      errorHandler(400, "Username must contain only lowercase letters")
+    );
+  }
+
+  if (!/^[a-zA-Z0-9]+$/.test(username)) {
+    return next(
+      errorHandler(400, "Username must contain only letters and numbers")
+    );
+  }
+
+  try {
+    const updatedFields = {
+      username,
+      email,
+    };
+
+    if (profilePicture) updatedFields.profilePicture = profilePicture;
+    if (password) updatedFields.password = bcrypt.hashSync(password, 10);
+
+    const updatedUser = await User.findByIdAndUpdate(
       req.params._id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          profilePicture: req.body.profilePicture,
-          password: req.body.password,
-        },
-      },
+      { $set: updatedFields },
       { new: true }
     );
-    const { password, ...rest } = updateUser._doc;
+
+    const { password: _, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);
@@ -191,7 +197,9 @@ const deleteUser = async (req, res, next) => {
     if (!deletedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User has been deleted", user: deletedUser });
+    res
+      .status(200)
+      .json({ message: "User has been deleted", user: deletedUser });
   } catch (error) {
     next(error);
   }
@@ -211,34 +219,33 @@ const getUsers = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
 
-      const usersWithoutPassword = users.map((user) => {
-        const { password, ...rest } = user._doc;
-        return rest;
-      });
+    const usersWithoutPassword = users.map((user) => {
+      const { password, ...rest } = user._doc;
+      return rest;
+    });
 
-      const totalUsers = await User.countDocuments();
+    const totalUsers = await User.countDocuments();
 
-      const now = new Date();
+    const now = new Date();
 
-      const oneMonthAgo = new Date(
-        now.getFullYear(),
-        now.getMonth() - 1,
-        now.getDate()
-      );
-      const lastMonthUsers = await User.countDocuments({
-        createdAt: { $gte: oneMonthAgo },
-      });
+    const oneMonthAgo = new Date(
+      now.getFullYear(),
+      now.getMonth() - 1,
+      now.getDate()
+    );
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: oneMonthAgo },
+    });
 
-      res.status(200).json({
-        users: usersWithoutPassword,
-        totalUsers,
-        lastMonthUsers,
-      });
-
+    res.status(200).json({
+      users: usersWithoutPassword,
+      totalUsers,
+      lastMonthUsers,
+    });
   } catch (error) {
     next(error);
   }
-}
+};
 
 const getUser = async (req, res) => {
   try {
@@ -246,7 +253,7 @@ const getUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const {password, ...rest} = user._doc;
+    const { password, ...rest } = user._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);
