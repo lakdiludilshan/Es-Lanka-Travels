@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-assets
+/src/assets
 node_modules
 .env
 dist
