@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
 import PlaceCard from "../components/PlaceCard";
 
 const Place = () => {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(6); // initially show 6 places
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  const featuredRef = useRef(null); // Ref for scrolling
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -26,7 +27,11 @@ const Place = () => {
   }, []);
 
   const handleShowMore = () => {
-    setVisibleCount((prev) => prev + 6); // show 6 more on each click
+    setVisibleCount((prev) => prev + 6);
+  };
+
+  const scrollToFeatured = () => {
+    featuredRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -46,17 +51,17 @@ const Place = () => {
           <p className="mt-4 text-lg md:text-xl">
             Explore beaches, mountains, heritage sites, and more.
           </p>
-          <Link
-            to="/search"
+          <button
+            onClick={scrollToFeatured}
             className="mt-6 inline-block bg-teal-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-amber-600 transition"
           >
             Browse All Places
-          </Link>
+          </button>
         </div>
       </div>
 
       {/* Place Listings Section */}
-      <div className="max-w-6xl mx-auto p-6 flex flex-col gap-8 py-7">
+      <div ref={featuredRef} className="max-w-6xl mx-auto p-6 flex flex-col gap-8 py-7">
         {loading ? (
           <p className="text-center text-lg text-gray-700 dark:text-white">
             Loading places...

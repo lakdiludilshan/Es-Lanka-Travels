@@ -11,6 +11,7 @@ import Dashboard from "./pages/Dashboard";
 import Tours from "./pages/Tours";
 import Place from "./pages/Place";
 import Hotel from "./pages/Hotel";
+import Guides from "./pages/Guides";
 
 import PlaceDetails from "./pages/PlaceDetails";
 import HotelDetails from "./pages/HotelDetails";
@@ -61,6 +62,7 @@ function App() {
           <Route path="/place/:placeId" element={<PlaceDetails />} /> 
           <Route path="/hotels" element={<Hotel />} />
           <Route path="/hotel/:hotelId" element={<HotelDetails />} />
+          <Route path="/guides" element={<Guides />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>

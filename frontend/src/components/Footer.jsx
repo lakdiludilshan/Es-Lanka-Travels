@@ -28,7 +28,7 @@ function FooterCom() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  100js Projects
+                  Tourism
                 </Footer.Link>
                 <Footer.Link
                   href="https://www.100jsprojects.com"
@@ -54,21 +54,21 @@ function FooterCom() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Github
+                  Facebook
                 </Footer.Link>
                 <Footer.Link
                   href="https://www.100jsprojects.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Discord
+                  Instagram
                 </Footer.Link>
                 <Footer.Link
                   href="https://www.100jsprojects.com"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Legalsss
+                  Twitter
                 </Footer.Link>
               </Footer.LinkGroup>
             </div>

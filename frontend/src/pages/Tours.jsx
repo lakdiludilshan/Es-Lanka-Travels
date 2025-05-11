@@ -7,7 +7,6 @@ const Tours = () => {
       <div>
         <TravelPreferencesForm />
       </div>
-      tour
     </div>
   )
 }

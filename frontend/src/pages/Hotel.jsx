@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import HotelCard from "../components/HotelCard";
 
@@ -6,7 +6,9 @@ const Hotel = () => {
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(6); // initially show 6 hotels
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  const featuredRef = useRef(null); // Ref to scroll to featured section
 
   useEffect(() => {
     const fetchHotels = async () => {
@@ -28,7 +30,11 @@ const Hotel = () => {
   }, []);
 
   const handleShowMore = () => {
-    setVisibleCount((prev) => prev + 6); // Show 6 more hotels per click
+    setVisibleCount((prev) => prev + 6);
+  };
+
+  const scrollToFeatured = () => {
+    featuredRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -48,17 +54,17 @@ const Hotel = () => {
           <p className="mt-4 text-lg md:text-xl">
             Unwind in paradise—from luxury resorts to cozy retreats.
           </p>
-          <Link
-            to="/search-hotels"
+          <button
+            onClick={scrollToFeatured}
             className="mt-6 inline-block bg-teal-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-amber-600 transition"
           >
             Browse All Hotels
-          </Link>
+          </button>
         </div>
       </div>
 
       {/* Hotel Listings Section */}
-      <div className="max-w-6xl mx-auto p-6 flex flex-col gap-8 py-7">
+      <div ref={featuredRef} className="max-w-6xl mx-auto p-6 flex flex-col gap-8 py-7">
         {loading ? (
           <p className="text-center text-lg text-gray-700 dark:text-white">
             Loading hotels...
