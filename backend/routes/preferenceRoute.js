@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const router = express.Router();
 const requireAuth = require("../middleware/requireAuth");
 const {
@@ -12,7 +11,7 @@ const {
 // Routes
 router.post("/", savePreferences);
 router.get("/", getAllPreferences);
-router.get("/:email", getUserPreferences);
+router.get("/user/:email", getUserPreferences);
 router.post("/recommended-places", getSuggestedPlaces);
 
-module.exports = router;
+module.exports = router; 

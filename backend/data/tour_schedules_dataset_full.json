@@ -1,0 +1,478 @@
+[
+  {
+    "title": "Negombo Arrival",
+    "location": "Negombo",
+    "day_type": "arrival",
+    "activities": [
+      {
+        "description": "Airport pickup",
+        "tags": ["Transportation", "Arrival"]
+      },
+      {
+        "description": "Check-in at hotel in Negombo",
+        "tags": ["Accommodation", "Arrival"]
+      },
+      {
+        "description": "Visit Negombo Beach",
+        "tags": ["Beach", "Relaxation"]
+      },
+      {
+        "description": "Stay overnight in Negombo",
+        "tags": ["Accommodation", "Night"]
+      }
+    ]
+  },
+  {
+    "title": "Bentota Adventure",
+    "location": "Bentota",
+    "day_type": "mid",
+    "activities": [
+      {
+        "description": "River safari on the Madu Ganga",
+        "tags": ["Adventure", "Wildlife", "Nature"]
+      },
+      {
+        "description": "Visit turtle hatchery",
+        "tags": ["Wildlife", "Conservation"]
+      },
+      {
+        "description": "Relax on Bentota Beach",
+        "tags": ["Beach", "Relaxation"]
+      },
+      {
+        "description": "Ayurvedic spa treatment",
+        "tags": ["Wellness", "Relaxation"]
+      },
+      {
+        "description": "Dinner by the sea",
+        "tags": ["Food", "Romantic"]
+      },
+      {
+        "description": "Luxury overnight hotel stay",
+        "tags": ["Accommodation", "Luxury"]
+      }
+    ]
+  },
+  {
+    "title": "Colombo Departure",
+    "location": "Colombo",
+    "day_type": "departure",
+    "activities": [
+      {
+        "description": "Travel to Colombo",
+        "tags": ["Transportation", "Departure"]
+      },
+      {
+        "description": "Optional city tour",
+        "tags": ["Culture", "City"]
+      },
+      {
+        "description": "Visit Galle Face Green",
+        "tags": ["Culture", "City"]
+      },
+      {
+        "description": "Shopping time",
+        "tags": ["Shopping", "City"]
+      },
+      {
+        "description": "Transfer to Bandaranaike International Airport",
+        "tags": ["Transportation", "Departure"]
+      },
+      {
+        "description": "Drop-off for international flight",
+        "tags": ["Transportation", "Departure"]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Sigiriya",
+    "title": "Sigiriya – Schedule 1",
+    "activities": [
+      {
+        "description": "Travel to Sigiriya",
+        "tags": [
+          "Shopping",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Climb Sigiriya Rock Fortress",
+        "tags": [
+          "Adventure",
+          "Hiking",
+          "UNESCO Sites"
+        ]
+      },
+      {
+        "description": "Visit Sigiriya Museum",
+        "tags": [
+          "Culture",
+          "UNESCO Sites"
+        ]
+      },
+      {
+        "description": "Lunch at a village restaurant",
+        "tags": [
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Optional village tour",
+        "tags": [
+          "Culture",
+          "Local Festivals"
+        ]
+      },
+      {
+        "description": "Overnight stay in hotel",
+        "tags": [
+          "Shopping",
+          "Nightlife"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Kandy",
+    "title": "Kandy – All",
+    "activities": [
+      {
+        "description": "Check-in at hotel",
+        "tags": [
+          "Shopping",
+          "Nightlife"
+        ]
+      },
+      {
+        "description": "Visit Temple of the Tooth",
+        "tags": [
+          "Ancient Temples",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Walk around Kandy Lake",
+        "tags": [
+          "Adventure",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Attend cultural dance show",
+        "tags": [
+          "Culture",
+          "Local Festivals"
+        ]
+      },
+      {
+        "description": "City tour and market visit",
+        "tags": [
+          "Shopping",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Dinner and overnight stay",
+        "tags": [
+          "Foodie Tour",
+          "Shopping"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Yala",
+    "title": "Yala – All",
+    "activities": [
+      {
+        "description": "Travel to Yala",
+        "tags": [
+          "Shopping",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Jeep Safari in National Park",
+        "tags": [
+          "Wildlife Safari",
+          "Safari"
+        ]
+      },
+      {
+        "description": "Observe elephants, leopards",
+        "tags": [
+          "Wildlife Safari",
+          "Safari"
+        ]
+      },
+      {
+        "description": "Bush walk with naturalist",
+        "tags": [
+          "Adventure",
+          "Safari"
+        ]
+      },
+      {
+        "description": "Visit Kataragama Temple",
+        "tags": [
+          "Ancient Temples",
+          "Spiritual Retreat"
+        ]
+      },
+      {
+        "description": "Dinner and overnight stay",
+        "tags": [
+          "Foodie Tour",
+          "Shopping"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Dambulla",
+    "title": "Dambulla – Cultural Heritage",
+    "activities": [
+      {
+        "description": "Visit Dambulla Cave Temple",
+        "tags": [
+          "Ancient Temples",
+          "Culture",
+          "UNESCO Sites"
+        ]
+      },
+      {
+        "description": "Explore Golden Temple surroundings",
+        "tags": [
+          "Culture",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Lunch at a traditional Lankan restaurant",
+        "tags": [
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Local handicraft shopping",
+        "tags": [
+          "Shopping"
+        ]
+      },
+      {
+        "description": "Evening meditation session",
+        "tags": [
+          "Spiritual Retreat",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Overnight at eco-lodge",
+        "tags": [
+          "Nightlife",
+          "Relaxation"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Nuwara Eliya",
+    "title": "Nuwara Eliya – Hill Country Bliss",
+    "activities": [
+      {
+        "description": "Visit tea plantations and factory",
+        "tags": [
+          "Culture",
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Stroll through Victoria Park",
+        "tags": [
+          "Relaxation",
+          "Adventure"
+        ]
+      },
+      {
+        "description": "Boat ride on Gregory Lake",
+        "tags": [
+          "Adventure",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Explore colonial town center",
+        "tags": [
+          "Culture",
+          "Shopping"
+        ]
+      },
+      {
+        "description": "High tea at a British-era hotel",
+        "tags": [
+          "Foodie Tour",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Overnight at hillside resort",
+        "tags": [
+          "Nightlife",
+          "Relaxation"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Mirissa",
+    "title": "Mirissa – Beach & Ocean Life",
+    "activities": [
+      {
+        "description": "Whale watching tour",
+        "tags": [
+          "Adventure",
+          "Wildlife Safari"
+        ]
+      },
+      {
+        "description": "Relax at Mirissa Beach",
+        "tags": [
+          "Beach Escape",
+          "Relaxation",
+          "Beaches"
+        ]
+      },
+      {
+        "description": "Seafood BBQ lunch",
+        "tags": [
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Visit Coconut Tree Hill",
+        "tags": [
+          "Adventure",
+          "Relaxation"
+        ]
+      },
+      {
+        "description": "Surf lesson or yoga session",
+        "tags": [
+          "Adventure",
+          "Spiritual Retreat"
+        ]
+      },
+      {
+        "description": "Overnight stay at beach resort",
+        "tags": [
+          "Nightlife",
+          "Relaxation"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Anuradhapura",
+    "title": "Anuradhapura – Ancient Kingdoms",
+    "activities": [
+      {
+        "description": "Explore ancient city ruins",
+        "tags": [
+          "Culture",
+          "UNESCO Sites",
+          "Ancient Temples"
+        ]
+      },
+      {
+        "description": "Visit Sri Maha Bodhi tree",
+        "tags": [
+          "Spiritual Retreat",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Local lunch experience",
+        "tags": [
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Evening bike tour through heritage sites",
+        "tags": [
+          "Adventure",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Sunset viewpoint by ancient tanks",
+        "tags": [
+          "Relaxation",
+          "Adventure"
+        ]
+      },
+      {
+        "description": "Overnight stay in heritage hotel",
+        "tags": [
+          "Shopping",
+          "Nightlife"
+        ]
+      }
+    ]
+  },
+  {
+    "day_type": "mid",
+    "location": "Trincomalee",
+    "title": "Trincomalee – East Coast Wonders",
+    "activities": [
+      {
+        "description": "Visit Koneswaram Temple",
+        "tags": [
+          "Ancient Temples",
+          "Culture"
+        ]
+      },
+      {
+        "description": "Snorkeling at Pigeon Island",
+        "tags": [
+          "Adventure",
+          "Wildlife Safari"
+        ]
+      },
+      {
+        "description": "Lunch with a sea view",
+        "tags": [
+          "Foodie Tour"
+        ]
+      },
+      {
+        "description": "Relax at Uppuveli Beach",
+        "tags": [
+          "Beach Escape",
+          "Relaxation",
+          "Beaches"
+        ]
+      },
+      {
+        "description": "Evening cultural show",
+        "tags": [
+          "Culture",
+          "Local Festivals"
+        ]
+      },
+      {
+        "description": "Overnight at oceanfront guesthouse",
+        "tags": [
+          "Nightlife",
+          "Relaxation"
+        ]
+      }
+    ]
+  }
+]
