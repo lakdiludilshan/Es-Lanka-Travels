@@ -20,6 +20,6 @@ router.get("/:placeId", getPlaceById);
 router.put("/edit/:placeId", requireAuth, editPlace);
 router.delete("/delete/:placeId", requireAuth, deletePlace);
 router.get("/paginated", requireAuth, getPaginatedPlaces);
-router.post("/:placeId/rate", requireAuth, addRating); // ⭐ New rating route
+router.post("/:placeId/rate", requireAuth, addRating); 
 
 module.exports = router;

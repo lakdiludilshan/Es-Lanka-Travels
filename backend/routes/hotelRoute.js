@@ -16,7 +16,7 @@ const router = express.Router();
 // Public routes
 router.get("/all", getHotels);
 router.get("/category/:category", getHotelsByCategory);
-router.get("/paginated", getPaginatedHotels); // No need for auth to view paginated list
+router.get("/paginated", getPaginatedHotels); 
 router.get("/:hotelId", getHotelById);
 
 // Protected routes
