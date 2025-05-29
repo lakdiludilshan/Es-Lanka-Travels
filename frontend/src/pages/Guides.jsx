@@ -6,8 +6,6 @@ const guides = [
   {
     name: "Sunil Thilakarathna",
     category: "National Guide",
-    address: "447/B/1 7th mile post, Hipankanda, Elpitiya",
-    nic: "732334550v",
     languages: ["English", "Spanish"],
     license: "SLG-2023-456",
     photo: Sunil,
@@ -16,8 +14,6 @@ const guides = [
   {
     name: "Rayan Fernando",
     category: "Chauffeur Guide",
-    address: "45 Galle Road, Galle",
-    nic: "945612378V",
     languages: ["English", "Germen", "French"],
     license: "SLG-2022-789",
     photo: Rayan,
@@ -62,12 +58,6 @@ const Guides = () => {
                 </h2>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
                   <strong>Guide Type:</strong> {guide.category}
-                </p>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>Address:</strong> {guide.address}
-                </p>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  <strong>NIC:</strong> {guide.nic}
                 </p>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
                   <strong>Languages:</strong> {guide.languages.join(", ")}
